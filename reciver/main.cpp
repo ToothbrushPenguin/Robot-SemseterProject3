@@ -1,9 +1,12 @@
-#include <iostream>
+#include "buffermsg.h"
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    BufferMsg a;
+
+    a.SignalRecord();
+
     return 0;
 }

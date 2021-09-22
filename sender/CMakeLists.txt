@@ -12,5 +12,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("/usr/include/SFML/")
 link_directories("/usr/lib/x86_64-linux-gnu/")
 
-add_executable(sender main.cpp messagetobuffer.cpp messagetobuffer.h)
+add_executable(sender main.cpp msgbuffer.cpp msgbuffer.h)
 target_link_libraries(sender sfml-audio)

@@ -1,12 +1,11 @@
-#include <iostream>
-#include "messagetobuffer.h"
+#include "msgbuffer.h"
 
 using namespace std;
 
 int main()
 {
     sf::Sound sound;
-    MessageToBuffer buf;
+    MsgBuffer buf;
     sf::SoundBuffer buffer = buf.convert({'#','3','7','3','A','D','3','B','3','*','0','A','D'});
     sound.setBuffer(buffer);
     sound.setVolume(100);
@@ -18,3 +17,9 @@ int main()
     }
     return 0;
 }
+
+//record
+//new tread databehanling
+//wait(x)
+//stoprecod
+//set databehanling buffer = record buffer
