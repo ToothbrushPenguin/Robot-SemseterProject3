@@ -2,8 +2,12 @@
 #define SIGNALRECODER_H
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
+#include <complex>
 #include <iostream>
+#include <chrono>
+//#include <thread>
 #include <math.h>
+#include <future>
 
 using namespace std;
 using namespace sf;

@@ -20,7 +20,6 @@ bool SignalRecoder::onProcessSamples(const int16_t *samples, size_t sampleCount)
     for(unsigned int j = 0; j < sampleCount; j++){
         samp.push_back(samples[j]);
     }
-    //cout << "i work" << i<< endl;
     return 1;
 }
 

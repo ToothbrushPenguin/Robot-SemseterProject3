@@ -6,7 +6,11 @@ int main()
 {
     BufferMsg a;
 
-    a.SignalRecord();
+    vector<char> e = a.SignalRecord();
+
+    for(unsigned int u = 0; u < e.size(); u++){
+        cout << e[u] << endl;
+    }
 
     return 0;
 }

@@ -8,7 +8,7 @@
 #include <complex>
 #include <iostream>
 #include <chrono>
-#include <thread>
+//#include <thread>
 #include <math.h>
 #include <future>
 
@@ -23,10 +23,11 @@ public:
 
 private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
+    vector<int> twoLargest(vector<double>chancein);
     char result(vector<int>);
 
     double samplerate = 8000;
-
+    vector<double> frequencys = {697,770,852,941,1209,1336,1477,1633};
     vector<sf::Int16> firstsampel = {0};
     sf::SoundBuffer fsbuf;
 
