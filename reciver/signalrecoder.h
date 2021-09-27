@@ -1,5 +1,6 @@
 #ifndef SIGNALRECODER_H
 #define SIGNALRECODER_H
+
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include <complex>

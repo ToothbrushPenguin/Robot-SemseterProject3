@@ -6,10 +6,10 @@ int main()
 {
     sf::Sound sound;
     MsgBuffer buf;
-    sf::SoundBuffer buffer = buf.convert({'#','3','7','3','A','D','3','B','3','*','0','A','D'});
+    sf::SoundBuffer buffer = buf.convert({'*','2','2','2','8','8','6','#'});
     sound.setBuffer(buffer);
     sound.setVolume(100);
-    sound.setLoop(true);
+    //sound.setLoop(true);
     sound.play();
 
     while(sound.getStatus()==2){
