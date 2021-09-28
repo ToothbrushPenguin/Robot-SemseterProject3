@@ -18,17 +18,15 @@ vector<char> BufferMsg::SignalRecord()
             fsout = FourierSplit(recorder.getSampels());
 
             if(fsout.size()==2){
-                if(result(fsout) == '*'||toggle == 1){
-                    if((result(fsout) == '*' && toggle == 1)||result(fsout) == 'N'){
-
-                    }else{
-                        toggle = 1;
-                        msg.push_back(result(fsout));
-                    }
-                }
                 if(result(fsout) == '#'){//stop bit
                     return msg;
                 }
+                if(toggle == 1&&result(fsout) != '*'&&result(fsout) != 'N'){
+                    msg.push_back(result(fsout));
+                }
+                if(result(fsout) == '*'){
+                    toggle = 1;
+                }               
             }
         }
     }
