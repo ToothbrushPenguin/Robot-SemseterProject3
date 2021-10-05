@@ -7,15 +7,16 @@ class RobotMovement
 public:
     RobotMovement();
     ~RobotMovement();
-    void move(int dist);
-    void turn(bool dir, float turn);
+    bool Move(bool dir, double  dist);
+    bool Turn(bool dir, double turn);
+    //void Disconnect();
 
 private:
-    void connect();
-    bool isConnect();
+    bool Connect();
+    bool IsConnect();
     bool conn = false;
-    float speed;
-    float turnDir;
+    double speed;
+    double turnDir;
 };
 
 #endif // ROBOTMOVEMENT_H
