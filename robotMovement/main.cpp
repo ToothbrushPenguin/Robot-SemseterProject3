@@ -36,9 +36,12 @@ int main()
     bool connected = ex.Connect();
     cout << "Connected: " << connected << endl;
 
+    while(true)
+    {
     bool forward = true;
-    double speed = 1;
+    double speed = 0.5;
     json move = ex.RobotMovement::Move(forward,speed);
 
     ex.publishMessage(move);
+    }
 }
