@@ -10,22 +10,12 @@ RobotMovement::~RobotMovement()
 
 }
 
-void RobotMovement::move()
+void RobotMovement::move(int dist)
 {
 
 }
 
 void RobotMovement::turn(bool dir, float turn)
-{
-
-}
-
-void RobotMovement::setSpeed()
-{
-
-}
-
-void RobotMovement::setTurn()
 {
 
 }
