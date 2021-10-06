@@ -25,8 +25,10 @@ void signal_Handler(int signum) {
 };
 //----------------------------------
 string fb;
+string mr;
 double speed;
 double turnspeed;
+int dist;
 
 int main()
 {
@@ -45,57 +47,76 @@ int main()
     //---------------------------------------------------------------------------
 
                           //Gøgl jeg har lavet til testning
-    json move;
-    json turn;
-    bool forward;
-    bool direction;
+    json movement;
+    bool forward = true;
+    bool direction = true;
 
     while(true)
     {
 
         speed = 0;
         turnspeed = 0;
+        dist = 1;
 
-        cout << "how much you want to move? :" << endl;
-        cin >> speed;
-
-        cout << "Forward or backwords? f,b" << endl;
-        cin >> fb;
-
-        if(fb == "f")
+        cout << "You want to move or rotate?: m,r" << endl;
+        cin >> mr;
+        if(mr == "m")
         {
-            forward = true;
-        }else
-        {
-            forward = false;
-        }
+            cout << "how fast you want to move? :" << endl;
+            cin >> speed;
 
-        cout << "How much you wanna turn ? :" << endl;
-        cin >> turnspeed;
-        if(turnspeed != 0)
-        {
-            cout << "Left or Right ? l,r" << endl;
+            cout << "how long you want to move? :" << endl;
+            cin >> dist;
+
+            cout << "Forward or backwords? f,b" << endl;
             cin >> fb;
 
-            if(fb == "l")
+            if(fb == "f")
             {
-                direction = false;
+                forward = true;
+            }else
+            {
+                forward = false;
             }
-            else
+
+                movement = ex.RobotMovement::Move(forward,speed);
+        }
+        else
+        {
+            cout << "How fast you wanna turn ? :" << endl;
+            cin >> turnspeed;
+            if(turnspeed != 0)
             {
-                direction = true;
+                cout << "Left or Right ? l,r" << endl;
+                cin >> fb;
+
+                if(fb == "l")
+                {
+                    direction = false;
+                }
+                else
+                {
+                    direction = true;
+                }
+
+                cout << "how far do you want to rotate? :" << endl;
+                cin >> dist;
+
+                movement = ex.RobotMovement::Turn(direction,turnspeed);
+
             }
         }
+
+
     //---------------------------------------------------------------------------
 
-
-    //creats json using Move and Turn function
-    move = ex.RobotMovement::Move(forward,speed);
-    turn = ex.RobotMovement::Turn(direction,turnspeed);
-
     //Sends json to turtlebot
-    ex.publishMessage(move);
-    ex.publishMessage(turn);
+        for(int i = 0; i < dist; i++)
+        {
+            ex.publishMessage(movement);
+            this_thread::sleep_for(chrono::milliseconds(200));
+        }
+
 
     //Sleeps for 2000 ms and clears the terminal.
     this_thread::sleep_for(chrono::milliseconds(2000));

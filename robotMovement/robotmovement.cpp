@@ -34,7 +34,7 @@ json RobotMovement::Move(bool dir, double dist)
 }
 json RobotMovement::Turn(bool dir, double turn)
 {
-    if(dir == false)
+    if(dir == true)
     {
         turn = -turn;
     }
