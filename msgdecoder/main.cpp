@@ -2,9 +2,12 @@
 
 int main()
 {
-    cout << "Hello World!" << endl;
+
     MsgHandeler f;
-    vector<char> i = {'A','A','1','D','C','5','A','D','1','3','6'};
-    cout << f.isValid(i) << endl;
+    vector<char> i = {'a','a','1','2','3','4','d','c','4','5',  '0'};
+    //cout << f.isValid(i) << endl;
+    f.incoder(i);
+    //f.isValid(i);
+    f.decodeValue(f.incoder(i));
     return 0;
 }

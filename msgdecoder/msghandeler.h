@@ -21,6 +21,8 @@ public:
 
     Direction DecodeMovement(vector<char>);
     double decodeValue(vector<char>);
+
+    vector<char> incoder(vector<char>);
     bool isValid(vector<char>);
 
 };

@@ -92,10 +92,10 @@ char BufferMsg::result(vector<int> frequency)
     if(frequency[0]!=0&&frequency[1]!=0){
         switch(frequency[0])
         {
-        case 697:n={'1','2','3','A'} ; break;
-        case 770:n={'4','5','6','B'} ; break;
-        case 852:n={'7','8','9','C'} ; break;
-        case 941:n={'*','0','#','D'} ; break;
+        case 697:n={'1','2','3','a'} ; break;
+        case 770:n={'4','5','6','b'} ; break;
+        case 852:n={'7','8','9','c'} ; break;
+        case 941:n={'*','0','#','d'} ; break;
         }
 
         int m;
