@@ -24,9 +24,15 @@ void signal_Handler(int signum) {
     exit(signum);
 };
 //----------------------------------
+string fb;
+double speed;
+double turnspeed;
 
 int main()
 {
+//------------------------------------------------------------------------------
+                   //krevet kode for at connect turtlebot
+
     signal(SIGINT, signal_Handler);
     cout << "Initializing for server '" << ADDRESS << "'..." << endl;
     mqtt::async_client cli(ADDRESS, "");
@@ -36,12 +42,64 @@ int main()
     bool connected = ex.Connect();
     cout << "Connected: " << connected << endl;
 
+    //---------------------------------------------------------------------------
+
+                          //Gøgl jeg har lavet til testning
+    json move;
+    json turn;
+    bool forward;
+    bool direction;
+
     while(true)
     {
-    bool forward = true;
-    double speed = 0.5;
-    json move = ex.RobotMovement::Move(forward,speed);
 
+        speed = 0;
+        turnspeed = 0;
+
+        cout << "how much you want to move? :" << endl;
+        cin >> speed;
+
+        cout << "Forward or backwords? f,b" << endl;
+        cin >> fb;
+
+        if(fb == "f")
+        {
+            forward = true;
+        }else
+        {
+            forward = false;
+        }
+
+        cout << "How much you wanna turn ? :" << endl;
+        cin >> turnspeed;
+        if(turnspeed != 0)
+        {
+            cout << "Left or Right ? l,r" << endl;
+            cin >> fb;
+
+            if(fb == "l")
+            {
+                direction = false;
+            }
+            else
+            {
+                direction = true;
+            }
+        }
+    //---------------------------------------------------------------------------
+
+
+    //creats json using Move and Turn function
+    move = ex.RobotMovement::Move(forward,speed);
+    turn = ex.RobotMovement::Turn(direction,turnspeed);
+
+    //Sends json to turtlebot
     ex.publishMessage(move);
+    ex.publishMessage(turn);
+
+    //Sleeps for 2000 ms and clears the terminal.
+    this_thread::sleep_for(chrono::milliseconds(2000));
+    cout << "\033[2J\033[1;1H";
+
     }
 }
