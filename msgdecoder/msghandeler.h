@@ -9,7 +9,7 @@ using namespace std;
 
 enum Direction
 {
-    LEFT, RIGHT, UP, DOWN
+    LEFT, RIGHT, UP, DOWN, STOP
 };
 
 class MsgHandeler
