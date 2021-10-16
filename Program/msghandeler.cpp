@@ -15,9 +15,9 @@ void MsgHandeler::handshake(bool in)
 
     vector<char> inc;
     if (in == true){
-        inc ={'a','c'};
+        inc ={'a','b','1'};
     }else if (in == false){
-        inc ={'a','d'};
+        inc ={'a','b','0'};
     }
     vector<char> incs = incoder(inc);
     for (uint i = 0;incs.size();i++){
