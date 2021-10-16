@@ -8,67 +8,67 @@ MsgHandeler::MsgHandeler()
 
 void MsgHandeler::handshake(bool in)
 {
+    MsgBuffer buf;
+    sf::SoundBuffer sBuf;
+    sf::Sound sound;
+    vector<char> truFal = {'*'};
+
+    vector<char> inc;
     if (in == true){
-        //call the class;
+        inc ={'a','c'};
     }else if (in == false){
-        //call the other class?;
+        inc ={'a','d'};
+    }
+    vector<char> incs = incoder(inc);
+    for (uint i = 0;incs.size();i++){
+        truFal.push_back(incs.at(i));
+    } truFal.push_back('#');
+    sBuf = buf.convert({truFal});
+    sound.setBuffer(sBuf);
+    sound.play();
+    while(sound.getStatus()==2){
     }
 }
 
-void MsgHandeler::isStartStop(vector<char> in)
+State MsgHandeler::isStartStop(vector<char> in)
 {
-    if (isValid(in)){
-        string start = "ac";
-        string stop = "ad";
-        string curStr;
-        curStr.push_back(in.at(0));
-        curStr.push_back(in.at(1));
-        if (curStr == start){
-            startStop = true;
-        }
-        else if (curStr == stop){
-            startStop = false;
-        }
+    string stop = "ad";
+    string curStr;
+    curStr.push_back(in.at(0));
+    curStr.push_back(in.at(1));
+
+    if (curStr==stop){
+        return STOP;
     }
+    return RUNNING;
 }
 
-vector<Direction> MsgHandeler::DecodeMovement(vector<char> in)
+Direction MsgHandeler::DecodeMovement(vector<char> in)
 {
-    if (isValid(in)){
-        isStartStop(in);
-        if(startStop==true){
-            Direction dir;
-            string msgDir;
-            msgDir.push_back(in.at(0));
-            msgDir.push_back(in.at(1));
-            if(msgDir == "aa"){
-                dir = LEFT;
-            }else if(msgDir == "bb"){
-                dir = RIGHT;
-            }else if(msgDir == "cc"){
-                dir = UP;
-            }else if(msgDir == "dd"){
-                dir = DOWN;
-            }else{
-                dir = STOP;
-            }
-            dirs.push_back(dir);
-
-        }else {
-            return dirs;
-        }
+    Direction dir;
+    string msgDir;
+    msgDir.push_back(in.at(0));
+    msgDir.push_back(in.at(1));
+    if(msgDir == "aa"){
+        dir = LEFT;
+    }else if(msgDir == "bb"){
+        dir = RIGHT;
+    }else if(msgDir == "cc"){
+        dir = UP;
+    }else if(msgDir == "dd"){
+        dir = DOWN;
+    }else{
+        dir = HALT;
     }
-    return ;
+    return dir;
 }
 
 double MsgHandeler::decodeValue(vector<char> in)
 {
     double out=0;
-    if (isValid(in)){
         for(unsigned int i = 0; i < in.size()-8; i++){
             out+=(in.at(in.size()-7-i)-48)*pow(10,i);
         }
-    }
     return out;
 
 }

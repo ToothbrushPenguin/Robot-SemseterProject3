@@ -4,12 +4,18 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
+#include "msgbuffer.h"
 
 using namespace std;
 
 enum Direction
 {
-    LEFT, RIGHT, UP, DOWN, STOP
+    LEFT, RIGHT, UP, DOWN, HALT
+};
+
+enum State
+{
+    STOP, RUNNING
 };
 
 class MsgHandeler
@@ -17,15 +23,14 @@ class MsgHandeler
 public:
     MsgHandeler();
 
-    void handshake(bool);
-    void isStartStop(vector<char> e);
-    vector<Direction> DecodeMovement(vector<char> e);
+    void handshake(bool d);
+    State isStartStop(vector<char> e);
+    Direction DecodeMovement(vector<char> e);
     double decodeValue(vector<char> e);
 
     vector<char> incoder(vector<char> e);
     bool isValid(vector<char> e);
 
-    bool startStop = false;
     vector<Direction> dirs;
 };
 
