@@ -8,7 +8,7 @@ SignalRecoder::SignalRecoder()
 bool SignalRecoder::onStart()
 {
     // Initialize whatever has to be done before the capture starts
-    setProcessingInterval(sf::milliseconds(100));
+    setProcessingInterval(sf::milliseconds(25));
 
     // Return true to start playing
     return true;

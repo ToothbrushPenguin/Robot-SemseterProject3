@@ -3,15 +3,15 @@
 MsgBuffer::MsgBuffer()
 {
     for(int n = 0; n < packetLength; n++ ){
-        a.push_back(1000*sin(n*2*M_PI*697/samplerate));
-        b.push_back(1000*sin(n*2*M_PI*770/samplerate));
-        c.push_back(1000*sin(n*2*M_PI*852/samplerate));
-        d.push_back(1000*sin(n*2*M_PI*941/samplerate));
+        a.push_back(10000*sin(n*2*M_PI*697/samplerate));
+        b.push_back(10000*sin(n*2*M_PI*770/samplerate));
+        c.push_back(10000*sin(n*2*M_PI*852/samplerate));
+        d.push_back(10000*sin(n*2*M_PI*941/samplerate));
 
-        e.push_back(1000*sin(n*2*M_PI*1209/samplerate));
-        f.push_back(1000*sin(n*2*M_PI*1336/samplerate));
-        g.push_back(1000*sin(n*2*M_PI*1477/samplerate));
-        h.push_back(1000*sin(n*2*M_PI*1633/samplerate));
+        e.push_back(10000*sin(n*2*M_PI*1209/samplerate));
+        f.push_back(10000*sin(n*2*M_PI*1336/samplerate));
+        g.push_back(10000*sin(n*2*M_PI*1477/samplerate));
+        h.push_back(10000*sin(n*2*M_PI*1633/samplerate));
     }
 }
 

@@ -11,6 +11,8 @@
 //#include <thread>
 #include <math.h>
 #include <future>
+#include <fstream>
+#include <numeric>
 
 using namespace std;
 using namespace std::complex_literals;

@@ -15,12 +15,13 @@ vector<char> BufferMsg::SignalRecord()
     vector<char> msg = {};
         while(true){
 
-            this_thread::sleep_for(chrono::milliseconds(100));
+            this_thread::sleep_for(chrono::milliseconds(25));
 
 
             vector<int> rec = recorder.getSamp();
 
             fsout = FourierSplit(recorder.getSamp());
+
 
 
             if(fsout.size()==2){
@@ -30,9 +31,19 @@ vector<char> BufferMsg::SignalRecord()
                 if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
 
-                    for(unsigned int i = 0; i < rec.size(); i++){
-                        cout << rec[i] << ",";
+                    string out = "";
+                    for (unsigned long i = 0; i < rec.size(); i++){
+                        out += to_string(rec[i]);
+                        if(i != rec.size()-1){
+                            out += ",";
+                        }
                     }
+
+                    ofstream samplefile;
+                    samplefile.open ("samplefile.txt");
+                    samplefile << out;
+                    samplefile.close();
+                    cout << "Should work" << endl;
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
@@ -76,13 +87,21 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
     vector<int> larst4high(middle,chancein.end());
     double first4max =*max_element(first4low.begin(),first4low.end());
     double larst4max =*max_element(larst4high.begin(),larst4high.end());
-    double first4difrence =first4max-*min_element(first4low.begin(),first4low.end());
-    double larst4difrence =larst4max-*min_element(larst4high.begin(),larst4high.end());
+    double biggest2sum = first4max+larst4max;
+    double firstsum = accumulate(first4low.begin(), first4low.end(), 0);
+    double lastsum = accumulate(larst4high.begin(), larst4high.end(), 0);
+    double allsum = accumulate(chancein.begin(), chancein.end(), 0);
+
 
     int lowfrek=0;
     int highfrek=0;
 
-    if(first4difrence >= 45 && larst4difrence >= 45){
+    if(biggest2sum/allsum > 0.69 && first4max/firstsum > 0.6 && larst4max/lastsum > 0.6){
+
+        for(int s = 0; s<8; s++){
+            cout << chancein[s] << "\n";
+        }
+        cout << endl;
 
         for(unsigned int u = 0; u < first4low.size(); u++){
             if(first4low[u]==first4max){
@@ -93,6 +112,8 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
             }
         }
 
+    }else{
+        return vector<int>(1,-1);
     }
 
     return {lowfrek,highfrek};
