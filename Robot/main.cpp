@@ -15,10 +15,10 @@ int main()
     while(boolW){
         vector<char> message = bM.SignalRecord();
 
-        handeler.handshake(handeler.isValid(message));
+        handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         while(!(handeler.isValid(message))){
            message = bM.SignalRecord();
-           handeler.handshake(handeler.isValid(message));
+           handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         }
 
         if(handeler.isStartStop(message) == RUNNING){
