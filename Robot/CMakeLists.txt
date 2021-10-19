@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(Program LANGUAGES CXX)
+project(Robot LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -13,10 +13,10 @@ include_directories("/usr/include/SFML/")
 link_directories("/usr/lib/x86_64-linux-gnu/")
 
 
-add_executable(Program main.cpp
+add_executable(Robot main.cpp
     msghandeler.cpp msghandeler.h
     msgbuffer.cpp msgbuffer.h
     buffermsg.cpp buffermsg.h signalrecoder.cpp signalrecoder.h
 
     )
-target_link_libraries(Program sfml-audio)
+target_link_libraries(Robot sfml-audio)

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
-#include "seqhandler.h"
+#include "msgbuffer.h"
 
 using namespace std;
 

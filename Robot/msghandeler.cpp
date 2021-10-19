@@ -6,7 +6,7 @@ MsgHandeler::MsgHandeler()
 
 }
 
-void MsgHandeler::handshake(bool in)
+void MsgHandeler::handshake(bool crc, int readPn)
 {
     MsgBuffer buf;
     sf::SoundBuffer sBuf;
@@ -14,9 +14,9 @@ void MsgHandeler::handshake(bool in)
     vector<char> truFal = {'*'};
 
     vector<char> inc;
-    if (in == true){
-        inc ={'a','b','1'};
-    }else if (in == false){
+    if(crc){
+        inc ={'a','b', (char)readPn};
+    }else{
         inc ={'a','b','0'};
     }
     vector<char> incs = incoder(inc);
@@ -100,6 +100,18 @@ vector<char> MsgHandeler::incoder(vector<char> in)
 
 }
 
+vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
+{
+
+    vector<char> msgout = msg;
+    msgout.push_back('a');
+    msgout.push_back('b');
+    msgout.push_back((char)(pnIn/10));
+    msgout.push_back((char)(pnIn%10));
+
+    return msgout;
+}
+
 bool MsgHandeler::isValid(vector<char>in)
 {
     string s;
@@ -113,4 +125,24 @@ bool MsgHandeler::isValid(vector<char>in)
         return 1;
     }
     return 0;
+}
+
+int MsgHandeler::readPn(vector<char> msg)
+{
+    int pnout = 0;
+    for(unsigned int i = 1; i < msg.size()-5; i++){
+        if(msg[i-1] == 'a' && msg [i] == 'b'){
+            pnout = ((int)msg[i+1]-48)*10+((int)msg[i+2]-48);
+        }
+    }
+    return pnout;
+}
+
+bool MsgHandeler::correctPn(int readpn)
+{
+    if(readpn == robPn + 1){
+        robPn++;
+        return true;
+    }
+    return false;
 }
