@@ -75,28 +75,44 @@ double MsgHandeler::decodeValue(vector<char> in)
 
 vector<char> MsgHandeler::crcIncoder(vector<char> in)
 {
-    string s;
-    for(unsigned int i = 0; i < in.size(); i++){
-        s.push_back(in.at(i));
+    int number;
+    unsigned long int value=0;
+    unsigned long divider = 65521;
+    for(unsigned int i = 1; i < in.size()+1;i++){
+        switch (in[in.size()-i]) {
+        case 'a':number = 10;break;
+        case 'b':number = 11;break;
+        case 'c':number = 12;break;
+        case 'd':number = 13;break;
+        default:number = in[in.size()-i]-48;break;
+        }
+
+        value +=number*pow(10,i);
+        cout << number << "  " << i-1 << "  " << number*pow(16,i) << endl;
     }
-    unsigned long value=0x0;
-    istringstream iss(s);
-    iss >> hex >> value;
-    value*=0x100000;
-    unsigned long divider =0xfff1;
+    cout << value<< endl;
+    value *=10000;
+    cout << value<< endl;
     unsigned long mod = value % divider;
     unsigned long end = divider - mod;
-    unsigned long finalMsg = value + end;
+    cout << end << endl;
 
-    ostringstream oss;
-    oss<<hex<<finalMsg;
-    s = oss.str();
+    stringstream ss;
+    ss<<end;
+    string s;
+    ss>>s;
 
-    vector<char> out;
-    for(unsigned int i = 0; i < s.size(); i++){
-        out.push_back(s.at(i));
+    int zeros = 0;
+    for(unsigned int i = 0; i < s.size();i++){
+        if((int)s.size() < 5 - zeros){
+            in.push_back('0');
+            zeros++;
+            i--;
+        }else{
+            in.push_back(s.at(i));
+        }
     }
-    return out;
+    return in;
 
 }
 
@@ -114,14 +130,20 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
 
 bool MsgHandeler::isValid(vector<char>in)
 {
-    string s;
-    for(unsigned int i = 0; i < in.size(); i++){
-        s.push_back(in.at(i));
+    int number;
+    unsigned long value=0;
+    unsigned long divider = 65521;
+    for(unsigned int i = 0; i < in.size()+1;i++){
+        switch (in[in.size()-i]) {
+        case 'a':number = 10;break;
+        case 'b':number = 11;break;
+        case 'c':number = 12;break;
+        case 'd':number = 13;break;
+        default:number = in[in.size()-i]-48;break;
+        }
+        value = value+number*pow(16,i);
     }
-    unsigned long value;
-    istringstream iss(s);
-    iss >> hex >> value;
-    if(value % 0xfff1 == 0){
+    if(value % divider == 0){
         return 1;
     }
     return 0;
