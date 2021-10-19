@@ -28,7 +28,7 @@ public:
     Direction DecodeMovement(vector<char> e);
     double decodeValue(vector<char> e);
 
-    vector<char> incoder(vector<char> e);
+    vector<char> crcIncoder(vector<char> e);
     vector<char> seqIncoder(vector<char> msg, int pnIn);
     bool isValid(vector<char> e);
 

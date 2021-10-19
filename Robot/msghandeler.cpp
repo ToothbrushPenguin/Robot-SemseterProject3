@@ -19,7 +19,7 @@ void MsgHandeler::handshake(bool crc, int readPn)
     }else{
         inc ={'a','b','0'};
     }
-    vector<char> incs = incoder(inc);
+    vector<char> incs = crcIncoder(inc);
     for (uint i = 0;incs.size();i++){
         truFal.push_back(incs.at(i));
     } truFal.push_back('#');
@@ -73,7 +73,7 @@ double MsgHandeler::decodeValue(vector<char> in)
 
 }
 
-vector<char> MsgHandeler::incoder(vector<char> in)
+vector<char> MsgHandeler::crcIncoder(vector<char> in)
 {
     string s;
     for(unsigned int i = 0; i < in.size(); i++){
