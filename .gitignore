@@ -1,0 +1,8 @@
+build-*/
+
+CMakeLists.txt.user
+
+*.zip
+
+#qtcreator autosaves
+*.autosave
