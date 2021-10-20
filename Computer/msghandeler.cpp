@@ -15,14 +15,15 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
     vector<char> inc;
     if(crc){
-        inc ={'a','b', (char)readPn};
+        inc ={'a','b', (char)(readPn/10+48),(char)(readPn%10+48)};
     }else{
-        inc ={'a','b','0'};
+        inc ={'a','b','0','0'};
     }
     vector<char> incs = crcIncoder(inc);
-    for (uint i = 0;incs.size();i++){
+    for (uint i = 0; i < incs.size(); i++){
         truFal.push_back(incs.at(i));
     } truFal.push_back('#');
+
     sBuf = buf.convert({truFal});
     sound.setBuffer(sBuf);
     sound.play();
@@ -87,15 +88,11 @@ vector<char> MsgHandeler::crcIncoder(vector<char> in)
         default:number = in[in.size()-i]-48;break;
         }
 
-        value +=number*pow(10,i);
-        cout << number << "  " << i-1 << "  " << number*pow(16,i) << endl;
+        value +=number*pow(16,i-1);
     }
-    cout << value<< endl;
-    value *=10000;
-    cout << value<< endl;
+    value *=100000;
     unsigned long mod = value % divider;
     unsigned long end = divider - mod;
-    cout << end << endl;
 
     stringstream ss;
     ss<<end;
@@ -122,8 +119,8 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
     vector<char> msgout = msg;
     msgout.push_back('a');
     msgout.push_back('b');
-    msgout.push_back((char)(pnIn/10));
-    msgout.push_back((char)(pnIn%10));
+    msgout.push_back((char)(pnIn/10+48));
+    msgout.push_back((char)(pnIn%10+48));
 
     return msgout;
 }
@@ -131,18 +128,26 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
 bool MsgHandeler::isValid(vector<char>in)
 {
     int number;
+    unsigned long front = 0;
+    unsigned long back = 0;
     unsigned long value=0;
     unsigned long divider = 65521;
-    for(unsigned int i = 0; i < in.size()+1;i++){
-        switch (in[in.size()-i]) {
+    for(unsigned int i = 0; i < in.size()-5; i++){
+        switch (in[i]) {
         case 'a':number = 10;break;
         case 'b':number = 11;break;
         case 'c':number = 12;break;
         case 'd':number = 13;break;
-        default:number = in[in.size()-i]-48;break;
+        default:number = in[i]-48;break;
         }
-        value = value+number*pow(16,i);
+        front += number*pow(16,in.size()-5-i-1);
     }
+
+    for(unsigned int i = 0; i < 5; i++){
+        int backn = in[in.size()-i-1]-48;
+        back += backn*pow(10,i);
+    }
+    value = front*100000+back;
     if(value % divider == 0){
         return 1;
     }

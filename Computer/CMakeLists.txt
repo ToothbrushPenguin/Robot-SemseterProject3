@@ -12,6 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("/usr/include/SFML/")
 link_directories("/usr/lib/x86_64-linux-gnu/")
 
-add_executable(Computer main.cpp msgbuffer.cpp msgbuffer.h seqhandler.cpp seqhandler.h msghandeler.cpp msghandeler.h)
-target_link_libraries(Computer sfml-audio)
+add_executable(Computer
+    main.cpp
+    msgbuffer.cpp msgbuffer.h
+    seqhandler.cpp seqhandler.h
+    msghandeler.cpp msghandeler.h
+    buffermsg.cpp buffermsg.h
+    signalrecoder.cpp signalrecoder.h)
+
+target_link_libraries(Computer sfml-audio sfml-system)
 

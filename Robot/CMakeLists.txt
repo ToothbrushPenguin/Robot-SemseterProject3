@@ -19,4 +19,4 @@ add_executable(Robot main.cpp
     buffermsg.cpp buffermsg.h signalrecoder.cpp signalrecoder.h
 
     )
-target_link_libraries(Robot sfml-audio)
+target_link_libraries(Robot sfml-audio sfml-system)

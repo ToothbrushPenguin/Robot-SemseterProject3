@@ -12,7 +12,7 @@ public:
     void resetPN();
 
 private:
-    int pn;
+    int pn = 1;
 };
 
 #endif // SEQHANDLER_H
