@@ -150,6 +150,47 @@ char BufferMsg::result(vector<int> frequency)
     return 'N';
 }
 
+vector<complex<double>> FastFourier(vector<complex<double>> fsbuf)
+{
+    //cout << "hello"<<endl;
+    int n = fsbuf.size();
+    vector<complex<double>> pe = {};
+    vector<complex<double>> po = {};
+    vector<complex<double>> ye;
+    vector<complex<double>> yo;
+    if (n==1){
+        return fsbuf;
+    }
+    complex<double> w = exp((-2*M_PI*1i)/(double) n);
+    for (uint i = 0; i<fsbuf.size();i++){
+        if(i % 2 == 0){
+            pe.push_back(fsbuf.at(i));
+        }else{
+            po.push_back(fsbuf.at(i));
+        }
+    }
+
+    ye = FastFourier(pe);
+    yo = FastFourier(po);
+    //cout << "goodbye"<<endl;
+    vector<complex<double>> y;
+    vector<complex<double>> y1;
+    vector<complex<double>> y2;
+
+    for (int j = 0;j<n/2;j++){
+        y1.push_back(ye[j]+pow(w,j)*yo[j]);
+        y2.push_back(ye[j]-pow(w,j)*yo[j]);
+    }
+    for (uint k = 0;k<y1.size()+y2.size();k++){
+        if(k<y1.size()){
+            y.push_back(y1.at(k));
+        }else{
+            y.push_back(y2.at(k-y1.size()));
+        }
+    }
+    return y;
+}
+
 
 
 

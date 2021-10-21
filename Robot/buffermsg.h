@@ -28,6 +28,7 @@ private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
     vector<int> twoLargest(vector<double>chancein);
     char result(vector<int>);
+    vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
 
     double samplerate = 8000;
     vector<double> frequencys = {697,770,852,941,1209,1336,1477,1633};
