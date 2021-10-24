@@ -15,7 +15,7 @@ RobotMovement::~RobotMovement()
 
 json RobotMovement::Move(bool dir, double dist)
 {
-    if(dir == true)
+    if(dir == false)
     {
         dist = -dist;
     }
@@ -53,14 +53,14 @@ json RobotMovement::Turn(bool dir, double turn)
 
 void RobotMovement::publishMessage(json j)
 {
-    try {
-        tok = top->publish(j.dump());
-        tok->wait();
-    }
-    catch (const mqtt::exception& exc) {
-        cerr << exc << endl;
-        return;
-    }
+        try {
+            tok = top->publish(j.dump());
+            tok->wait();
+        }
+        catch (const mqtt::exception& exc) {
+            cerr << exc << endl;
+            return;
+        }
 }
 
 bool RobotMovement::Connect() // Connecter robotten og outputter i terminal

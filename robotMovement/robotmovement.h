@@ -12,9 +12,9 @@
 using namespace std;
 using json = nlohmann::json;
 
-//const string ADDRESS { "tcp://192.168.0.6:1883" };
+//const string ADDRESS { "tcp://192.168.109.105:1883" }; Krispy netværk
 //const string ADDRESS { "tcp://localhost:1883" };
-const string ADDRESS { "tcp://192.168.109.105:1883" };
+const string ADDRESS { "tcp://192.168.176.105:1883" };
 const string TOPIC { "cmd_vel" };
 const int QOS = 1;
 
