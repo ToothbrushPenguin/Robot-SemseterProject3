@@ -2,35 +2,64 @@
 
 BufferMsg::BufferMsg()
 {
-}
-
-vector<char> BufferMsg::SignalRecord()
-{    
-    bool toggle = 0;
-    vector<char> msg = {};
-
     if (SignalRecoder::isAvailable())
     {
-        while(true){
-            recorder.start(samplerate);
-            this_thread::sleep_for(chrono::milliseconds(100));
-            recorder.stop();
-            fsout = FourierSplit(recorder.getSampels());
+    recorder.start(samplerate);
+    this_thread::sleep_for(chrono::milliseconds(2000));
+    }
+}
+
+vector<char> BufferMsg::SignalRecord(int timeout)
+{    
+    int sleeptime = 25;
+    bool toggle = 0;
+    int time = 0;
+    vector<char> msg = {};
+        while(timeout == -1 || time < timeout){
+
+            time += sleeptime;
+            this_thread::sleep_for(chrono::milliseconds(sleeptime));
+
+
+            vector<int> rec = recorder.getSamp();
+
+            fsout = FourierSplit(recorder.getSamp());
+
+
 
             if(fsout.size()==2){
                 if(result(fsout) == '#'){//stop bit
                     return msg;
                 }
-                if(toggle == 1&&result(fsout) != '*'&&result(fsout) != 'N'){
+                if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
+
+                    string out = "";
+                    for (unsigned long i = 0; i < rec.size(); i++){
+                        out += to_string(rec[i]);
+                        if(i != rec.size()-1){
+                            out += ",";
+                        }
+                    }
+
+                    ofstream samplefile;
+                    samplefile.open ("samplefile.txt");
+                    samplefile << out;
+                    samplefile.close();
+                    cout << "Should work" << endl;
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
                 }               
             }
+
         }
-    }
-    return {'0'};
+        return {0};
+}
+
+BufferMsg::~BufferMsg()
+{
+    recorder.stop();
 }
 
 
@@ -63,13 +92,21 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
     vector<int> larst4high(middle,chancein.end());
     double first4max =*max_element(first4low.begin(),first4low.end());
     double larst4max =*max_element(larst4high.begin(),larst4high.end());
-    double first4difrence =first4max-*min_element(first4low.begin(),first4low.end());
-    double larst4difrence =larst4max-*min_element(larst4high.begin(),larst4high.end());
+    double biggest2sum = first4max+larst4max;
+    double firstsum = accumulate(first4low.begin(), first4low.end(), 0);
+    double lastsum = accumulate(larst4high.begin(), larst4high.end(), 0);
+    double allsum = accumulate(chancein.begin(), chancein.end(), 0);
+
 
     int lowfrek=0;
     int highfrek=0;
 
-    if(first4difrence >= 45 && larst4difrence >= 45){
+    if(biggest2sum/allsum > 0.69 && first4max/firstsum > 0.6 && larst4max/lastsum > 0.6){
+
+        for(int s = 0; s<8; s++){
+            cout << chancein[s] << "\n";
+        }
+        cout << endl;
 
         for(unsigned int u = 0; u < first4low.size(); u++){
             if(first4low[u]==first4max){
@@ -80,6 +117,8 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
             }
         }
 
+    }else{
+        return vector<int>(1,-1);
     }
 
     return {lowfrek,highfrek};
@@ -92,10 +131,10 @@ char BufferMsg::result(vector<int> frequency)
     if(frequency[0]!=0&&frequency[1]!=0){
         switch(frequency[0])
         {
-        case 697:n={'1','2','3','A'} ; break;
-        case 770:n={'4','5','6','B'} ; break;
-        case 852:n={'7','8','9','C'} ; break;
-        case 941:n={'*','0','#','D'} ; break;
+        case 697:n={'1','2','3','a'} ; break;
+        case 770:n={'4','5','6','b'} ; break;
+        case 852:n={'7','8','9','c'} ; break;
+        case 941:n={'*','0','#','d'} ; break;
         }
 
         int m;

@@ -11,6 +11,8 @@
 //#include <thread>
 #include <math.h>
 #include <future>
+#include <fstream>
+#include <numeric>
 
 using namespace std;
 using namespace std::complex_literals;
@@ -19,12 +21,14 @@ class BufferMsg
 {
 public:
     BufferMsg();
-    vector<char> SignalRecord();
+    vector<char> SignalRecord(int timeout = -1);
+    ~BufferMsg();
 
 private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
     vector<int> twoLargest(vector<double>chancein);
     char result(vector<int>);
+    vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
 
     double samplerate = 8000;
     vector<double> frequencys = {697,770,852,941,1209,1336,1477,1633};

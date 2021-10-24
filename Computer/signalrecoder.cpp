@@ -8,14 +8,14 @@ SignalRecoder::SignalRecoder()
 bool SignalRecoder::onStart()
 {
     // Initialize whatever has to be done before the capture starts
-    setProcessingInterval(sf::milliseconds(100));
+    setProcessingInterval(sf::milliseconds(25));
 
     // Return true to start playing
     return true;
 }
 bool SignalRecoder::onProcessSamples(const int16_t *samples, size_t sampleCount)
 {
-    i++;
+    const lock_guard<mutex> lock(mutexlock);
     samp.clear();
     for(unsigned int j = 0; j < sampleCount; j++){
         samp.push_back(samples[j]);
@@ -28,8 +28,9 @@ void SignalRecoder::onStop()
 
 }
 
-vector<int> SignalRecoder::getSampels()
+vector<int> SignalRecoder::getSamp()
 {
+    const lock_guard<mutex> lock(mutexlock);
     return samp;
 }
 

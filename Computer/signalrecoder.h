@@ -10,6 +10,7 @@
 #include <math.h>
 #include <future>
 
+
 using namespace std;
 using namespace sf;
 
@@ -18,16 +19,16 @@ class SignalRecoder : public SoundRecorder
 public:
     SignalRecoder();
 
-    bool onStart() override;
-    bool onProcessSamples(const int16_t* samples, size_t sampleCount) override;
-    void onStop() override;
+    virtual bool onStart() override;
+    virtual bool onProcessSamples(const int16_t* samples, size_t sampleCount) override;
+    virtual void onStop() override;
 
-    vector<int> getSampels();
+    vector<int> getSamp();
 
+    mutex mutexlock;
 
-    vector<int> samp;
+    vector<int> samp={0};
 
-    int i=0;
 };
 
 #endif // SIGNALRECODER_H
