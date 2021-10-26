@@ -1,5 +1,6 @@
 #include <iostream>
 #include "robotmovement.h"
+#include <cmath>
 
 using namespace std;
 
@@ -23,8 +24,10 @@ void signal_Handler(int signum) {
 };
 //----------------------------------
 //variables
-double afstand;
+int afstand;
 int dist;
+double rest;
+double hastighed;
 double x;
 
 int main()
@@ -52,13 +55,28 @@ int main()
         cout << "indtast afstand:";
         cin >> afstand;
 
-        dist = (afstand - 2.6553)/3.2885;
+        //dist = (afstand - 2.6553)/3.2885;
+
+
+
+        dist = afstand / 4.775;
+
+        rest = (afstand / 4.775)-dist;
+
+        x = (rest - 1.55)/23.1;
+
+        if(x < 0)
+        {
+            x = -x;
+        }
+        //231*x + 1,55
+
+        movement = ex.Move(forward,0.2);
+
+
         cout << "dist: " << dist << endl;
-        x = (afstand-(dist*6.5))/23.3;
-
-        cout << "x:" << x << endl;;
-        movement = ex.Move(forward,0.13);
-
+        cout << "rest: " << rest << endl;
+        cout << "x:" << x << endl;
     //---------------------------------------------------------------------------
 
     //Sends json to turtlebot

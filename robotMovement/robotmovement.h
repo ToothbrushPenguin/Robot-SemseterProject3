@@ -27,7 +27,7 @@ class RobotMovement
 public:
     RobotMovement(mqtt::async_client& client, mqtt::topic& topic);
     ~RobotMovement();
-    json Move(bool dir, double  dist);
+    json Move(bool dir, double  speed);
     json Turn(bool dir, double turn);
     //void Disconnect();
     void publishMessage(json j);

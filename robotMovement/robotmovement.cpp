@@ -13,16 +13,16 @@ RobotMovement::~RobotMovement()
 
 }
 
-json RobotMovement::Move(bool dir, double dist)
+json RobotMovement::Move(bool dir, double speed)
 {
     if(dir == false)
     {
-        dist = -dist;
+        speed = -speed;
     }
 
     json j =
         {
-        {"linear", {{"x", dist}, {"y", 0}, {"z", 0}}},
+        {"linear", {{"x", speed}, {"y", 0}, {"z", 0}}},
         {"angular", {{"x", 0}, {"y", 0}, {"z", 0}}}
         };
 
