@@ -43,7 +43,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                     }
 
                     ofstream samplefile;
-                    samplefile.open ("samplefile.txt");
+                    samplefile.open ("samplefile1.txt");
                     samplefile << out;
                     samplefile.close();
                     cout << "Should work" << endl;
@@ -54,7 +54,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             }
 
         }
-        return {0};
+        return {'0'};
 }
 
 BufferMsg::~BufferMsg()

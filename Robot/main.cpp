@@ -11,15 +11,19 @@ int main()
     MsgHandeler handeler;
     vector<Direction> dirs;
     vector<double> vals;
+
     bool boolW = 1;
+
     while(boolW){
         vector<char> message = bM.SignalRecord();
 
+        cout << "done" << endl;
+
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
-        while(!(handeler.isValid(message))){
-           message = bM.SignalRecord();
-           handeler.handshake(handeler.isValid(message),handeler.readPn(message));
-        }
+        //while(!(handeler.isValid(message))){
+        //   message = bM.SignalRecord();
+        //   handeler.handshake(handeler.isValid(message),handeler.readPn(message));
+        //}
 
         if(handeler.isStartStop(message) == RUNNING){
             dirs.push_back(handeler.DecodeMovement(message));

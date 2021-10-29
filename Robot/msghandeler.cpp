@@ -15,9 +15,9 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
     vector<char> inc;
     if(crc){
-        inc ={'a','b', (char)(readPn/10+48),(char)(readPn%10+48)};
+        inc ={'a','b', (char)(readPn+48)};
     }else{
-        inc ={'a','b','0','0'};
+        inc ={'a','b','0'};
     }
     vector<char> incs = crcIncoder(inc);
     for (uint i = 0; i < incs.size(); i++){
@@ -67,8 +67,8 @@ Direction MsgHandeler::DecodeMovement(vector<char> in)
 double MsgHandeler::decodeValue(vector<char> in)
 {
     double out=0;
-        for(unsigned int i = 0; i < in.size()-8; i++){
-            out+=(in.at(in.size()-7-i)-48)*pow(10,i);
+        for(unsigned int i = 0; i < in.size()-10; i++){
+            out+=(in.at(in.size()-8-i)-48)*pow(10,i);
         }
     return out;
 
@@ -88,9 +88,9 @@ vector<char> MsgHandeler::crcIncoder(vector<char> in)
         default:number = in[in.size()-i]-48;break;
         }
 
-        value +=number*pow(16,i-1);
+        value += number*pow(16,i-1);
     }
-    value *=100000;
+    value *= 100000;
     unsigned long mod = value % divider;
     unsigned long end = divider - mod;
 
@@ -100,7 +100,7 @@ vector<char> MsgHandeler::crcIncoder(vector<char> in)
     ss>>s;
 
     int zeros = 0;
-    for(unsigned int i = 0; i < s.size();i++){
+    for(unsigned int i = 0; i < s.size(); i++){
         if((int)s.size() < 5 - zeros){
             in.push_back('0');
             zeros++;
@@ -119,10 +119,20 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
     vector<char> msgout = msg;
     msgout.push_back('a');
     msgout.push_back('b');
-    msgout.push_back((char)(pnIn/10+48));
-    msgout.push_back((char)(pnIn%10+48));
+    msgout.push_back((char)(pnIn+48));
 
     return msgout;
+}
+
+vector<char> MsgHandeler::ssbit(vector<char> msg)
+{
+    vector<char> out = {'*'};
+    for(unsigned int i = 0; i < msg.size(); i++){
+        out.push_back(msg[i]);
+    }
+    out.push_back('#');
+
+    return out;
 }
 
 bool MsgHandeler::isValid(vector<char>in)
@@ -132,6 +142,11 @@ bool MsgHandeler::isValid(vector<char>in)
     unsigned long back = 0;
     unsigned long value=0;
     unsigned long divider = 65521;
+
+    if(in.size()==1 && in[0] == '0'){
+        return 0;
+    }
+
     for(unsigned int i = 0; i < in.size()-5; i++){
         switch (in[i]) {
         case 'a':number = 10;break;
@@ -159,7 +174,7 @@ int MsgHandeler::readPn(vector<char> msg)
     int pnout = 0;
     for(unsigned int i = 1; i < msg.size()-5; i++){
         if(msg[i-1] == 'a' && msg [i] == 'b'){
-            pnout = ((int)msg[i+1]-48)*10+((int)msg[i+2]-48);
+            pnout = ((int)msg[i+1]-48);
         }
     }
     return pnout;
@@ -167,9 +182,29 @@ int MsgHandeler::readPn(vector<char> msg)
 
 bool MsgHandeler::correctPn(int readpn)
 {
+    MsgHandeler han;
     if(readpn == robPn + 1){
-        robPn++;
+        han.incRobPn();
         return true;
     }
     return false;
+}
+
+void MsgHandeler::resetRobPn()
+{
+    robPn = 1;
+}
+
+void MsgHandeler::incRobPn()
+{
+    if(robPn == 9){
+        resetRobPn();
+    }else{
+        robPn++;
+    }
+}
+
+int MsgHandeler::getRobPn()
+{
+    return robPn;
 }

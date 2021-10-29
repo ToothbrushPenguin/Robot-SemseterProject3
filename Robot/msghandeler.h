@@ -30,11 +30,15 @@ public:
 
     vector<char> crcIncoder(vector<char> e);
     vector<char> seqIncoder(vector<char> msg, int pnIn);
+    vector<char> ssbit(vector<char> msg);
     bool isValid(vector<char> e);
 
     vector<Direction> dirs;
     int readPn(vector<char>msg);
     bool correctPn(int readpn);
+    void resetRobPn();
+    void incRobPn();
+    int getRobPn();
 
 private:
     int robPn = 0;
