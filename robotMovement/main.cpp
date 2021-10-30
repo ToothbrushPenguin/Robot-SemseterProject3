@@ -1,6 +1,6 @@
 #include <iostream>
 #include "robotmovement.h"
-#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -24,14 +24,14 @@ void signal_Handler(int signum) {
 };
 //----------------------------------
 //variables
-int afstand;
+int afstand = 10;
 int dist;
 double rest;
-double hastighed;
 double x;
 
 int main()
 {
+
 //------------------------------------------------------------------------------
                    //krevet kode for at connect turtlebot
 
@@ -44,55 +44,18 @@ int main()
     bool connected = ex.Connect();
     cout << "Connected: " << connected << endl;
 
-    //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
                           //Gøgl jeg har lavet til testning
-    json movement;
     bool forward = true;
+    bool left = true;
 
-    while(true)
-    {
-        cout << "indtast afstand:";
-        cin >> afstand;
+    ex.addMovement(20, forward);
+    ex.addMovement(100, forward);
+    ex.addMovement(15, forward);
+    ex.addTurn(360, left);
+    ex.addMovement(15, forward);
 
-        //dist = (afstand - 2.6553)/3.2885;
+    ex.sendMovement();
 
-
-
-        dist = afstand / 4.775;
-
-        rest = (afstand / 4.775)-dist;
-
-        x = (rest - 1.55)/23.1;
-
-        if(x < 0)
-        {
-            x = -x;
-        }
-        //231*x + 1,55
-
-        movement = ex.Move(forward,0.2);
-
-
-        cout << "dist: " << dist << endl;
-        cout << "rest: " << rest << endl;
-        cout << "x:" << x << endl;
-    //---------------------------------------------------------------------------
-
-    //Sends json to turtlebot
-        for(int i = 0; i < dist; i++)
-        {
-            ex.publishMessage(movement);
-            this_thread::sleep_for(chrono::milliseconds(200));
-        }
-
-        movement = ex.Move(forward,x);
-
-        ex.publishMessage(movement);
-        this_thread::sleep_for(chrono::milliseconds(200));
-
-    //Clears the terminal.
-    //cout << "\033[2J\033[1;1H";
-
-    }
 }
