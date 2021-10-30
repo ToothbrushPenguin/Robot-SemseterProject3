@@ -87,41 +87,69 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
 vector<int> BufferMsg::twoLargest(vector<double> chancein)
 {
-    auto middle = next(chancein.begin(),chancein.size()/2);
-    vector<int> first4low(chancein.begin(),middle);
-    vector<int> larst4high(middle,chancein.end());
-    double first4max =*max_element(first4low.begin(),first4low.end());
-    double larst4max =*max_element(larst4high.begin(),larst4high.end());
-    double biggest2sum = first4max+larst4max;
-    double firstsum = accumulate(first4low.begin(), first4low.end(), 0);
-    double lastsum = accumulate(larst4high.begin(), larst4high.end(), 0);
-    double allsum = accumulate(chancein.begin(), chancein.end(), 0);
-
-
-    int lowfrek=0;
-    int highfrek=0;
-
-    if(biggest2sum/allsum > 0.69 && first4max/firstsum > 0.6 && larst4max/lastsum > 0.6){
-
-        for(int s = 0; s<8; s++){
-            cout << chancein[s] << "\n";
+    //værdien for de forskellige peaks
+    vector<double> peaks;
+    vector<double> peaksIDX;
+    for(unsigned int i = 1; i<=chancein.size()-2;i++){
+        if(chancein[i-1]<chancein[i] && chancein[i+1]<chancein[i]){
+            peaks.push_back(chancein[i]);
+            peaksIDX.push_back(i);
         }
-        cout << endl;
-
-        for(unsigned int u = 0; u < first4low.size(); u++){
-            if(first4low[u]==first4max){
-                lowfrek=(int)frequencys[u];
-            }
-            if(larst4high[u]==larst4max){
-                highfrek=(int)frequencys[u+4];
-            }
+    }
+    //de 8 frekvnesers værdi
+    vector<double> eight={};
+    vector<double> eightIDX={};
+    for(unsigned int i = 0; i<=chancein.size();i++){
+        if(i==frequencys[0]||i==frequencys[1]||i==frequencys[2]||i==frequencys[3]||i==frequencys[4]||i==frequencys[5]||i==frequencys[6]||i==frequencys[7]){
+            eight.push_back(chancein[i]);
+            eightIDX.push_back(i);
         }
-
-    }else{
-        return vector<int>(1,-1);
     }
 
-    return {lowfrek,highfrek};
+    //finding the 3 largest of the 8 dtmf freqencies
+    vector<int> largesteightIDX={0,0,0};
+    vector<double> largestEight={0,0,0};
+    for(unsigned int i = 0; i<=eight.size();i++){
+        if(eight[i]>largestEight[0]){
+            largestEight.at(1)=largestEight.at(0);
+            largesteightIDX.at(1)=largesteightIDX.at(0);
+            largestEight.at(0)=eight[i];
+            largesteightIDX.at(0)=eightIDX[i];
+        }else if(eight[i]>largestEight[1]){
+            largestEight.at(2)=largestEight.at(1);
+            largesteightIDX.at(2)=largesteightIDX.at(1);
+            largestEight.at(1)=eight[i];
+            largesteightIDX.at(1)=eightIDX[i];
+        }else if(eight[i]>largestEight[2]){
+            largestEight.at(2)=eight[i];
+            largesteightIDX.at(2)=eightIDX[i];
+        }
+    }
+
+    //finding the 3 largest peaks
+    vector<int> largestPeaksIDX={0,0,0};
+    vector<double> largestPeaks={0,0,0};
+    for(unsigned int i = 0; i<=peaks.size();i++){
+        if(peaks[i]>largestPeaks[0]){
+            largestPeaks.at(1)=largestPeaks.at(0);
+            largestPeaksIDX.at(1)=largestPeaksIDX.at(0);
+            largestPeaks.at(0)=peaks[i];
+            largestPeaksIDX.at(0)=peaksIDX[i];
+        }else if(peaks[i]>largestPeaks[1]){
+            largestPeaks.at(2)=largestPeaks.at(1);
+            largestPeaksIDX.at(2)=largestPeaksIDX.at(1);
+            largestPeaks.at(1)=peaks[i];
+            largestPeaksIDX.at(1)=peaksIDX[i];
+        }else if(peaks[i]>largestPeaks[2]){
+            largestPeaks.at(2)=peaks[i];
+            largestPeaksIDX.at(2)=peaksIDX[i];
+        }
+    }
+
+    if(((largestPeaks.at(0)+largestPeaks.at(1))/largestPeaks.at(2)) > 5 && ((largestEight.at(0)+largestEight.at(1))/largestEight.at(2)) > 5){
+        return {largesteightIDX.at(0),largesteightIDX.at(1)};
+    }
+    return{0,0};
 }
 
 char BufferMsg::result(vector<int> frequency)
