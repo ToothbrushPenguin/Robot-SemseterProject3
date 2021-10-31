@@ -17,8 +17,6 @@ int main()
     while(boolW){
         vector<char> message = bM.SignalRecord();
 
-        cout << "done" << endl;
-
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //while(!(handeler.isValid(message))){
         //   message = bM.SignalRecord();

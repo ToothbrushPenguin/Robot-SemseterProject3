@@ -13,7 +13,7 @@ int main()
     SeqHandler seq;
     vector<vector<char>> msg = {{'a'}};
     //vector<vector<char>> msg = {{'*','a','a','1','0','#'},{'*','b','b','5','0','#'},{'*','a','a','2','0','#'}};
-    sound.setVolume(50);
+    sound.setVolume(100);
 
 
     for(unsigned int i = 0; i < msg.size(); i++){
