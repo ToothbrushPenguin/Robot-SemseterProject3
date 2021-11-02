@@ -31,7 +31,7 @@ void MsgHandeler::handshake(bool crc, int readPn)
     }
 }
 
-State MsgHandeler::isStartStop(vector<char> in)
+State MsgHandeler::isStop(vector<char> in)
 {
     string stop = "ad";
     string curStr;

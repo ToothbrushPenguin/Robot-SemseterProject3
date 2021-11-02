@@ -24,7 +24,7 @@ public:
     MsgHandeler();
 
     void handshake(bool crc, int readPn);
-    State isStartStop(vector<char> e);
+    State isStop(vector<char> e);
     Direction DecodeMovement(vector<char> e);
     double decodeValue(vector<char> e);
 

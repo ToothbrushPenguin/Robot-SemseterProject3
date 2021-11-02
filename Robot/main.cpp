@@ -28,9 +28,22 @@ int main()
     MsgHandeler handeler;
     vector<Direction> dirs;
     vector<double> vals;
-
     bool boolW = 1;
 
+    //------------------------------------------------------------------------------
+                       //krevet kode for at connect turtlebot
+
+        signal(SIGINT, signal_Handler);
+        cout << "Initializing for server '" << ADDRESS << "'..." << endl;
+        mqtt::async_client cli(ADDRESS, "");
+        mqtt::topic top(cli, TOPIC, QOS);
+
+        RobotMovement ex(cli, top);
+        bool connected = ex.Connect();
+        cout << "Connected: " << connected << endl;
+
+    //------------------------------------------------------------------------------
+                      //besked modtagelse
     while(boolW){
         vector<char> message = bM.SignalRecord();
 
@@ -40,12 +53,38 @@ int main()
         //   handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //}
 
-        if(handeler.isStartStop(message) == RUNNING){
+        if(handeler.isStop(message) == RUNNING){
             dirs.push_back(handeler.DecodeMovement(message));
             vals.push_back(handeler.decodeValue(message));
-        }else if (handeler.isStartStop(message)== STOP){
+        }else if (handeler.isStop(message)== STOP){
             boolW = 0;
         }
     }
 
+    //------------------------------------------------------------------------------
+                      //bevægelse af robotten
+    for(unsigned int i = 0; i < dirs.size(); i++){
+        switch (dirs.at(i)){
+        case LEFT:
+            ex.addTurn(vals.at(i), 1);
+            break;
+        case RIGHT:
+            ex.addTurn(vals.at(i), 0);
+            break;
+        case UP:
+            ex.addMovement(vals.at(i), 1);
+            break;
+        case DOWN:
+            ex.addMovement(vals.at(i), 0);
+            break;
+        case HALT:
+            ex.addMovement(0, 1);
+            break;
+        default:
+            break;
+        }
+    }
+    ex.sendMovement();
+
+    //---------------------------------------------------------------------------
 }
