@@ -2,8 +2,25 @@
 #include "buffermsg.h"
 #include "msgbuffer.h"
 #include "msghandeler.h"
+#include "robotmovement.h"
 
 using namespace std;
+
+// Declared globally as signal handler can't be part of the class..
+mqtt::async_client* cli;
+mqtt::topic* top;
+mqtt::token_ptr tok;
+
+// Handle CTRL + C and stop the robot
+void signal_Handler(int signum) {
+    json stop_msg = {{"linear", {{"x", 0.0}, {"y", 0}, {"z", 0}}},
+    {"angular", {{"x", 0}, {"y", 0}, {"z", 0.0}}}
+    };
+    cout << "CTRL + C pressed, exiting.." << endl;
+    tok = top->publish(stop_msg.dump());
+    tok->wait();
+    exit(signum);
+};
 
 int main()
 {

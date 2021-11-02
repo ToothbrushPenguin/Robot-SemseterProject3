@@ -22,12 +22,7 @@ void signal_Handler(int signum) {
     tok->wait();
     exit(signum);
 };
-//----------------------------------
-//variables
-int afstand = 10;
-int dist;
-double rest;
-double x;
+
 
 int main()
 {

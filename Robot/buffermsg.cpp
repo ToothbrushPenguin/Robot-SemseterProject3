@@ -84,7 +84,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     fft = FastFourier(input);
 
     for(int i = 0; i < Fn; i++){
-        chanceoffrek.push_back(abs(fft[i]/(complex<double>)oriL)*2);
+        chanceoffrek.push_back(abs(fft[i]*fft[i]/(complex<double>)fft.size()));
     }
 
 
