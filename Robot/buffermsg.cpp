@@ -24,7 +24,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             vector<int> rec = recorder.getSamp();
 
             fsout = FourierSplit(rec);
-
+            cout << result(fsout) << endl;
 
             if(fsout.size()==2){
                 if(result(fsout) == '#'){//stop bit
@@ -41,11 +41,11 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         }
                     }
 
-                    ofstream samplefile;
-                    samplefile.open ("samplefile.txt");
-                    samplefile << out;
-                    samplefile.close();
-                    cout << "Should work" << endl;
+                    //ofstream samplefile;
+                    //samplefile.open ("samplefile.txt");
+                    //samplefile << out;
+                    //samplefile.close();
+                    //cout << "Should work" << endl;
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
@@ -85,9 +85,22 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     fft = FastFourier(input);
 
-    for(int i = 0; i < Fn; i++){
+
+    //for(uint i = 0; i < chanceoffrek.size(); i++){
+    //    cout <<", " <<chanceoffrek[i];
+    //}
+    //cout  << endl<< endl;
+
+    for(int i = 0; i < Fn-1; i++){
         chanceoffrek.push_back(abs(pow(fft[i],2))/(double)fft.size());
     }
+
+    //for(uint i = 0; i < chanceoffrek.size(); i++){
+    //    cout <<", " <<chanceoffrek[i];
+    //}
+    //cout  << endl<< endl;
+
+
 
     for(unsigned int i = 0; i <= chanceoffrek.size(); i++){
         if(i%125==0){
@@ -189,7 +202,7 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
         }
     }
 
-    if((((largestPeaks.at(0)+largestPeaks.at(1))/largestPeaks.at(2)) > 5 && ((largestEight.at(0)+largestEight.at(1))/largestEight.at(2)) > 5) && (((largesteightIDX.at(0) < 1000) && (largesteightIDX.at(1) > 1000))||((largesteightIDX.at(0) > 1000) && (largesteightIDX.at(1) < 1000)))){
+    if((((largestPeaks.at(0)+largestPeaks.at(1))/largestPeaks.at(2)) > 2 && ((largestEight.at(0)+largestEight.at(1))/largestEight.at(2)) > 2) && (((largesteightIDX.at(0) < 1000) && (largesteightIDX.at(1) > 1000))||((largesteightIDX.at(0) > 1000) && (largesteightIDX.at(1) < 1000)))){
         if(largesteightIDX.at(1) < largesteightIDX.at(0)){
             return {largesteightIDX.at(1),largesteightIDX.at(0)};
         }

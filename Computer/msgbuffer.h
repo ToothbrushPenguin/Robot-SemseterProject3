@@ -15,7 +15,6 @@ public:
 
 
     sf::SoundBuffer buffer;
-    vector<sf::Int16> samplesAll;
 
     vector<sf::Int16> a;
     vector<sf::Int16> b;

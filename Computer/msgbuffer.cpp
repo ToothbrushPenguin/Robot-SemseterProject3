@@ -20,6 +20,7 @@ sf::SoundBuffer MsgBuffer::convert( vector<char> message )
 
     vector<sf::Int16> f1Lf;
     vector<sf::Int16> f2Hf;
+    vector<sf::Int16> samplesAll;
 
     for(unsigned int i = 0; i < message.size(); i++){
         switch(message[i])
