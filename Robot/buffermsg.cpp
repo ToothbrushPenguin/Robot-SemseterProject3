@@ -91,7 +91,10 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     }
 
     for(uint i = 0; i < chanceoffrek.size(); i++){
-        cout <<", " <<chanceoffrek[i];
+        if(i == chanceoffrek.size()-1){
+            cout << chanceoffrek[i];
+        }else{
+        cout <<chanceoffrek[i]<<", " ;}
     }
 
 
