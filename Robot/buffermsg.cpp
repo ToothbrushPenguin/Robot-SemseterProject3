@@ -74,7 +74,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     vector<complex<double>> input = {};
     vector<complex<double>> fft = {};
-
+    cout << "{\"";
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)samples[i]);
     }
@@ -86,19 +86,14 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     fft = FastFourier(input);
 
 
-    //for(uint i = 0; i < chanceoffrek.size(); i++){
-    //    cout <<", " <<chanceoffrek[i];
-    //}
-    //cout  << endl<< endl;
-
     for(int i = 0; i < Fn-1; i++){
         chanceoffrek.push_back(abs(pow(fft[i],2))/(double)fft.size());
     }
 
-    //for(uint i = 0; i < chanceoffrek.size(); i++){
-    //    cout <<", " <<chanceoffrek[i];
-    //}
-    //cout  << endl<< endl;
+    for(uint i = 0; i < chanceoffrek.size(); i++){
+        cout <<", " <<chanceoffrek[i];
+    }
+
 
 
 
@@ -135,7 +130,8 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     //}
     //cout  << endl<< endl;
 
-
+    cout << "\"}" << endl;
+    cout  << endl;
     return twoLargest(avchanceoffrek);
 }
 
