@@ -29,6 +29,9 @@ void MsgHandeler::handshake(bool crc, int readPn)
     sound.play();
     while(sound.getStatus()==2){
     }
+
+
+
 }
 
 State MsgHandeler::isStop(vector<char> in)

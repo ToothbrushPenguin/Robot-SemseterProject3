@@ -46,16 +46,16 @@ int main()
                       //besked modtagelse
 
     while(boolW){
-        cout << "e" << endl;
+
         vector<char> message = bM.SignalRecord();
-        cout << "f" << endl;
+
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------
 
-        while(!(handeler.isValid(message))){
-           message = bM.SignalRecord();
-           handeler.handshake(handeler.isValid(message),handeler.readPn(message));
-        }
+        //while(!(handeler.isValid(message))){
+        //   message = bM.SignalRecord();
+        //   handeler.handshake(handeler.isValid(message),handeler.readPn(message));
+        //}
         //------------
 
         if(handeler.isStop(message) == RUNNING){
@@ -66,9 +66,9 @@ int main()
         }
     }
 
-    for(unsigned int i = 0; i < dirs.size(); i++){
-        cout << dirs.at(i) << " : " << vals.at(i) << endl;
-    }
+    //for(unsigned int i = 0; i < dirs.size(); i++){
+    //    cout << dirs.at(i) << " : " << vals.at(i) << endl;
+    //}
 
     //------------------------------------------------------------------------------
                       //bevægelse af robotten

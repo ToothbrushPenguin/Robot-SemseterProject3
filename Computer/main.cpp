@@ -11,29 +11,40 @@ int main()
     MsgBuffer buf;
     MsgHandeler handler;
     SeqHandler seq;
-    //vector<vector<char>> msg = {{'a'}};
+    //vector<vector<char>> msg = {{'5','8','1','*','9','5','*','*','8','6','7','9','3','8','3','6','9','5','8','4','5','9','1','8','1','2','9','2','8','3','4','9','4','8','5','6','9','7','8','1','*','2','9','0','8','5','*','*','8','3','*','9','2','8','1','2','9','7','*','*','8','5','1','*','9','7','*','*','8','6','7','9','3','8','3','6','9','5','8','4','5','9','1','8','1','1','*','9','7','*','*','8','6','5','9','0','8','0','8'}};
     vector<vector<char>> msg = {{'d'}};
     sound.setVolume(100);
 
-
     for(int i = 0; i < (int)msg.size(); i++){
+
         vector<char> incoded = handler.seqIncoder(msg[i], seq.getPN());
         incoded = handler.crcIncoder(incoded);
         incoded = handler.ssbit(incoded);
 
-        for(int i = 0; i < (int)incoded.size(); i++){
-            cout << incoded.at(i);
+        for(int j = 0; j < (int)incoded.size(); j++){
+            cout << incoded.at(j);
         }
         cout << endl<<endl;
-
+        cout << incoded.size() << endl;
         //vector<char> incoded = handler.ssbit(msg[i]);
+        sf::SoundBuffer buffer;
+        for(unsigned int u = 0; u< (incoded.size()*2.); u++){
+            cout << u << endl;
+            //0,n,n,3,n,n,6
+            if(u%2==0){
+                buffer = buf.convert({incoded[u/2.]});
+            }else{
+                buffer = buf.convert({'S'});
+            }
 
-        sf::SoundBuffer buffer = buf.convert(incoded);
-        sound.setBuffer(buffer);
-        //sound.setLoop(true);
-        sound.play();
-        while(sound.getStatus()==2){
+            sound.setBuffer(buffer);
+            //sound.setLoop(true);
+            sound.play();
+            while(sound.getStatus()==2){
+            }
         }
+
+
 
         vector<char> robReply = bM.SignalRecord(3000);
 

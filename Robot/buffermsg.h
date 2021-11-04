@@ -42,6 +42,8 @@ private:
 
     vector<int> fsout;
 
+    //skal fjernes
+    ofstream samplefile;
 
 };
 

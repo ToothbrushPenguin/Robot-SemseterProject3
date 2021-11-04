@@ -14,7 +14,7 @@ public:
     sf::SoundBuffer convert(vector<char>message);
 
 
-    sf::SoundBuffer buffer;
+
 
     vector<sf::Int16> a;
     vector<sf::Int16> b;
@@ -26,9 +26,11 @@ public:
     vector<sf::Int16> g;
     vector<sf::Int16> h;
 
+    vector<sf::Int16> zero;
+
     unsigned int samplerate = 8000;
-    int milisecondsPrBip = 50;
-    int packetLength = milisecondsPrBip * samplerate/1000;
+    int milisecondsPrBip = 100;
+    int packetLength = milisecondsPrBip * (samplerate/1000);
 
 };
 
