@@ -53,9 +53,11 @@ vector<complex<double>> FastFourier(vector<complex<double>> fsbuf)
 int FourierSplit(vector<double> samples)
 {
     vector<double> chanceoffrek = {};
+    vector<double> avchanceoffrek = {};
     int oriL = samples.size();
     int npad = samplerate - oriL;
-    int Fn = 1700;
+
+    int Fn = 8000;
 
     vector<complex<double>> input = {};
     vector<complex<double>> fft = {};
@@ -63,27 +65,40 @@ int FourierSplit(vector<double> samples)
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)samples[i]);
     }
-
+    cout << input.size() << endl;
+    cout << input.size() << endl;
     for(int i = 0; i < npad; i++){
         input.push_back(0.);
     }
 
-    fft = FastFourier(input);
-
-    for(int i = 0; i < Fn; i++){
-        chanceoffrek.push_back(abs(pow(fft[i],2))/(double)fft.size());
-    }
-
-    cout << chanceoffrek.size()<< endl;
 
     cout << "{\"";
-    for(uint i = 0; i < chanceoffrek.size(); i++){
-        if(i == chanceoffrek.size()-1){
-            cout << chanceoffrek[i];
+    for(uint i = 0; i < input.size(); i++){
+        if(i == input.size()-1){
+            cout << real(input[i]);
         }else{
-        cout <<chanceoffrek[i]<<", " ;}
+        cout <<real(input[i])<<", " ;}
     }
     cout << "\"}," << endl;
+
+    cout << input.size() << endl;
+
+    fft = FastFourier(input);
+
+
+    for(int i = 0; i < Fn; i++){
+        chanceoffrek.push_back(abs(pow(fft[i]/(complex<double>)oriL,2)));
+    }
+
+
+    //cout << "{\"";
+    //for(uint i = 0; i < chanceoffrek.size(); i++){
+    //    if(i == chanceoffrek.size()-1){
+    //        cout << chanceoffrek[i];
+    //    }else{
+    //    cout <<chanceoffrek[i]<<", " ;}
+    //}
+    //cout << "\"}," << endl;
 
 
     return 1;
@@ -94,9 +109,26 @@ int main()
 {
     vector<double> sampels = {};
 
-    for (double j = 0; j < 1; j+=0.001){
-        sampels.push_back(10000*sin(M_PI*1000*j));
+
+    //for (double j = 0; j < 1; j+=(1/(samplerate))){
+    //    sampels.push_back((100*sin(M_PI*697*j)));
+    //}
+    //cout << sampels.size() << endl;
+    //cout << "{\"";
+    //for(uint i = 0; i < sampels.size(); i++){
+    //    if(i == sampels.size()-1){
+    //        cout << sampels[i];
+    //    }else{
+    //    cout <<sampels[i]<<", " ;}
+    //}
+    //cout << "\"}," << endl;
+
+    for (double j = 0; j < 0.05; j+=(1/(samplerate))){
+        sampels.push_back((10000*sin(M_PI*697*j)));
     }
+
+
+
     FourierSplit(sampels);
 
 
