@@ -76,7 +76,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     vector<double> avchanceoffrek = {};
     int oriL = samples.size();
     int npad = samplerate - oriL;
-    int padSide = 10;
+    int padSide = 1;
     int Fn = 1700;
 
     vector<complex<double>> input = {};
@@ -94,7 +94,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
 
     for(int i = 0; i < Fn-1; i++){
-        chanceoffrek.push_back(abs(pow(fft[i],2))/(double)fft.size());
+        chanceoffrek.push_back((abs(fft[i])*2)/fft.size());
     }
 
 
@@ -109,19 +109,19 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
 
 
-    for(unsigned int i = 0; i <= chanceoffrek.size(); i++){
-        if(i % 125==0){
-            if(i==0 || i==chanceoffrek.size()){
-                chanceoffrek.at(i) = 0;
-            }else{
-                chanceoffrek.at(i) = (chanceoffrek.at(i-1) + chanceoffrek.at(i+1)) / 2;
-            }
-        }
-    }
-
-
-
-
+    //for(unsigned int i = 0; i <= chanceoffrek.size(); i++){
+    //    if(i % 125==0){
+    //        if(i==0 || i==chanceoffrek.size()){
+    //            chanceoffrek.at(i) = 0;
+    //        }else{
+    //            chanceoffrek.at(i) = (chanceoffrek.at(i-1) + chanceoffrek.at(i+1)) / 2;
+    //        }
+    //    }
+    //}
+    //
+    //
+    //
+    //
     for(int i = 0; i < padSide; i++){
         avchanceoffrek.push_back(chanceoffrek.at(i));
 
@@ -148,7 +148,6 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     //    cout <<avchanceoffrek[i]<<", " ;}
     //}
     //cout << "\"}," << endl;
-
 
     samplefile << "{\"";
     for(uint i = 0; i < avchanceoffrek.size(); i++){
@@ -264,44 +263,33 @@ char BufferMsg::result(vector<int> frequency)
     return 'N';
 }
 
-vector<complex<double>> BufferMsg::FastFourier(vector<complex<double>> fsbuf)
+vector<complex<double>> BufferMsg::FastFourier(vector<complex<double>> msg)
 {
-    //cout << "hello"<<endl;
-    int n = fsbuf.size();
+    unsigned int n = msg.size();
+
+    if(n == 1){
+        return msg;
+    }
+
     vector<complex<double>> pe = {};
     vector<complex<double>> po = {};
-    vector<complex<double>> ye = {};
-    vector<complex<double>> yo = {};
-    if (n==1){
-        return fsbuf;
-    }
-    complex<double> w = exp((-2*M_PI*1i)/(double)n);
-    for (uint i = 0; i < fsbuf.size(); i++){
-        if(i % 2 == 0){
-            pe.push_back(fsbuf.at(i));
-        }else{
-            po.push_back(fsbuf.at(i));
-        }
+
+    for(unsigned int i = 0; i <= n-2; i += 2){
+        pe.push_back(msg.at(i));
+        po.push_back(msg.at(i+1));
     }
 
-    ye = FastFourier(pe);
-    yo = FastFourier(po);
-    //cout << "goodbye"<<endl;
-    vector<complex<double>> y = {};
-    vector<complex<double>> y1 = {};
-    vector<complex<double>> y2 = {};
+    vector<complex<double>> ye = FastFourier(pe);
+    vector<complex<double>> yo = FastFourier(po);
 
-    for (int j = 0; j < n/2; j++){
-        y1.push_back(ye[j]+pow(w,j)*yo[j]);
-        y2.push_back(ye[j]-pow(w,j)*yo[j]);
+    complex<double> w(cos(-2*M_PI/n), sin(-2*M_PI/n));
+    vector<complex<double>> y(n,0);
+
+    for(unsigned int i = 0; i < n/2; i++){
+        y.at(i) = ye.at(i)+(pow(w,i)*yo.at(i));
+        y.at(i+(n/2)) = ye.at(i)-(pow(w,i)*yo.at(i));
     }
-    for (uint k = 0; k < y1.size() + y2.size(); k++){
-        if(k < y1.size()){
-            y.push_back(y1.at(k));
-        }else{
-            y.push_back(y2.at(k-y1.size()));
-        }
-    }
+
     return y;
 }
 

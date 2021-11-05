@@ -11,7 +11,7 @@ BufferMsg::BufferMsg()
 
 vector<char> BufferMsg::SignalRecord(int timeout)
 {    
-    int sleeptime = 40;
+    int sleeptime = 25;
     bool toggle = 0;
     int time = 0;
     vector<char> msg = {};

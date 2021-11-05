@@ -20,7 +20,7 @@ vector<complex<double>> FastFourier(vector<complex<double>> fsbuf)
     if (n==1){
         return fsbuf;
     }
-    complex<double> w = exp((-2*M_PI*1i)/(double)n);
+    complex<double> w(cos(-2*M_PI/n), sin(-2*M_PI/n));
     for (uint i = 0; i < fsbuf.size(); i++){
         if(i % 2 == 0){
             pe.push_back(fsbuf.at(i));
@@ -65,23 +65,23 @@ int FourierSplit(vector<double> samples)
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)samples[i]);
     }
-    cout << input.size() << endl;
-    cout << input.size() << endl;
+    //cout << input.size() << endl;
+    //cout << input.size() << endl;
     for(int i = 0; i < npad; i++){
         input.push_back(0.);
     }
 
 
-    cout << "{\"";
-    for(uint i = 0; i < input.size(); i++){
-        if(i == input.size()-1){
-            cout << real(input[i]);
-        }else{
-        cout <<real(input[i])<<", " ;}
-    }
-    cout << "\"}," << endl;
-
-    cout << input.size() << endl;
+    //cout << "{\"";
+    //for(uint i = 0; i < input.size(); i++){
+    //    if(i == input.size()-1){
+    //        cout << real(input[i]);
+    //    }else{
+    //    cout <<real(input[i])<<", " ;}
+    //}
+    //cout << "\"}," << endl;
+    //
+    //cout << input.size() << endl;
 
     fft = FastFourier(input);
 
@@ -91,14 +91,14 @@ int FourierSplit(vector<double> samples)
     }
 
 
-    //cout << "{\"";
-    //for(uint i = 0; i < chanceoffrek.size(); i++){
-    //    if(i == chanceoffrek.size()-1){
-    //        cout << chanceoffrek[i];
-    //    }else{
-    //    cout <<chanceoffrek[i]<<", " ;}
-    //}
-    //cout << "\"}," << endl;
+    cout << "{\"";
+    for(uint i = 0; i < chanceoffrek.size(); i++){
+        if(i == chanceoffrek.size()-1){
+            cout << chanceoffrek[i];
+        }else{
+        cout <<chanceoffrek[i]<<", " ;}
+    }
+    cout << "\"}," << endl;
 
 
     return 1;
@@ -124,7 +124,7 @@ int main()
     //cout << "\"}," << endl;
 
     for (double j = 0; j < 0.05; j+=(1/(samplerate))){
-        sampels.push_back((10000*sin(M_PI*697*j)));
+        sampels.push_back((10000*sin(M_PI*697*j))+(10000*sin(M_PI*1209*j)));
     }
 
 

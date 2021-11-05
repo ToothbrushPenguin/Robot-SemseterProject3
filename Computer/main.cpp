@@ -28,14 +28,14 @@ int main()
         cout << incoded.size() << endl;
         //vector<char> incoded = handler.ssbit(msg[i]);
         sf::SoundBuffer buffer;
-        for(unsigned int u = 0; u< (incoded.size()*2.); u++){
+        for(unsigned int u = 0; u< (incoded.size()); u++){
             cout << u << endl;
             //0,n,n,3,n,n,6
-            if(u%2==0){
+            //if(u%2==0){
                 buffer = buf.convert({incoded[u/2.]});
-            }else{
-                buffer = buf.convert({'S'});
-            }
+            //}else{
+            //    buffer = buf.convert({'S'});
+            //}
 
             sound.setBuffer(buffer);
             //sound.setLoop(true);
