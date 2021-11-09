@@ -42,7 +42,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
 
             if(fsout.size()==2){
                 if(result(fsout) == '#'){//stop bit
-                    return msg;
+                    return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
@@ -366,5 +366,32 @@ vector<int> BufferMsg::triWinFunk(vector<int> samp)
     return nsamp;
 }
 
+vector<char> dumb(vector<char> list)
+{
+    vector<char> tL = list;
+    vector<char> fL;
+    uint d = list.size();
+    int c;
+
+    for(uint i = 0;i<d;i++){
+        if(!(i==d-1)){
+            if(tL.at(i) == tL.at(i+1)){
+                c = 1;
+                while(tL.at(i+1)==tL.at(i)){
+                    i++;
+                    c++;
+                }
+                for (int j = 0; j<c/2;j++){
+                    fL.push_back(tL.at(i));
+                }
+            }
+            else{fL.push_back(tL.at(i));}
+        }
+        else{
+            fL.push_back(tL.at(i));
+        }
+    }
+    return fL;
+}
 
 

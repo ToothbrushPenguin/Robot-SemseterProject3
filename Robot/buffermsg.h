@@ -32,6 +32,7 @@ private:
     vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
     int LargestInList(vector<double>list);
     vector<int> triWinFunk(vector<int> samp);
+    vector<char> dumb(vector<char>list);
 
     double samplerate = 8000;
     vector<sf::Int16> firstsampel = {0};
