@@ -12,7 +12,7 @@ int main()
     MsgHandeler handler;
     SeqHandler seq;
     //vector<vector<char>> msg = {{'5','8','1','*','9','5','*','*','8','6','7','9','3','8','3','6','9','5','8','4','5','9','1','8','1','2','9','2','8','3','4','9','4','8','5','6','9','7','8','1','*','2','9','0','8','5','*','*','8','3','*','9','2','8','1','2','9','7','*','*','8','5','1','*','9','7','*','*','8','6','7','9','3','8','3','6','9','5','8','4','5','9','1','8','1','1','*','9','7','*','*','8','6','5','9','0','8','0','8'}};
-    vector<vector<char>> msg = {{'d'}};
+    vector<vector<char>> msg = {{'d','a','1','2','3','a'}};
     sound.setVolume(100);
 
     for(int i = 0; i < (int)msg.size(); i++){
@@ -28,14 +28,14 @@ int main()
         cout << incoded.size() << endl;
         //vector<char> incoded = handler.ssbit(msg[i]);
         sf::SoundBuffer buffer;
-        for(unsigned int u = 0; u< (incoded.size()); u++){
+
+        for(unsigned int u = 0; u< (incoded.size()*2); u++){
             cout << u << endl;
-            //0,n,n,3,n,n,6
-            //if(u%2==0){
-                buffer = buf.convert({incoded[u/2.]});
-            //}else{
-            //    buffer = buf.convert({'S'});
-            //}
+            if(u%2==0){
+              buffer = buf.convert({incoded[u/2]});
+            }else{
+              buffer = buf.convert({'S'});
+            }
 
             sound.setBuffer(buffer);
             //sound.setLoop(true);
@@ -43,6 +43,7 @@ int main()
             while(sound.getStatus()==2){
             }
         }
+
 
 
 
