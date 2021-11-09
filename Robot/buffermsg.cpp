@@ -366,7 +366,7 @@ vector<int> BufferMsg::triWinFunk(vector<int> samp)
     return nsamp;
 }
 
-vector<char> dumb(vector<char> list)
+vector<char> BufferMsg::dumb(vector<char> list)
 {
     vector<char> tL = list;
     vector<char> fL;
@@ -378,17 +378,20 @@ vector<char> dumb(vector<char> list)
             if(tL.at(i) == tL.at(i+1)){
                 c = 1;
                 while(tL.at(i+1)==tL.at(i)){
+                    if(i==d-2){
+                        cout << "c: " << c << endl;
+                        i++;
+                        c++;
+                        break;
+                    }
                     i++;
                     c++;
                 }
                 for (int j = 0; j<c/2;j++){
                     fL.push_back(tL.at(i));
                 }
-            }
-            else{fL.push_back(tL.at(i));}
-        }
-        else{
-            fL.push_back(tL.at(i));
+            }else{fL.push_back(tL.at(i));}
+        }else{fL.push_back(tL.at(i));
         }
     }
     return fL;
