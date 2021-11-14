@@ -122,7 +122,8 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     auto start = chrono::high_resolution_clock::now();
 
-    fft = FastFourier(input);
+    //fft = FastFourier(input);
+    fft = DFT(input);
 
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
@@ -344,6 +345,31 @@ vector<complex<double>> BufferMsg::FastFourier(vector<complex<double>> msg)
     }
 
     return y;
+}
+
+vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
+{
+
+    int N = input.size();
+    vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
+    vector<complex<double>> output = {};
+
+    for(uint k = 0; k < freqs.size(); k++){
+        double re = 0;
+        double im = 0;
+        for(int n = 0; n < N; n++)
+        {
+            re+= cos((2 * M_PI * freqs[k] * n) / N) * real(input[n]);
+            im+= -sin((2 * M_PI * freqs[k] * n) / N) * real(input[n]);
+        }
+        complex<double> temp(re, im);
+        output.push_back(temp);
+    }
+    for(uint i = 0; i < output.size(); i++){
+        cout << abs(output[i]) << " ";
+    }
+    cout << endl;
+    return output;
 }
 
 int BufferMsg::LargestInList(vector<double> list)

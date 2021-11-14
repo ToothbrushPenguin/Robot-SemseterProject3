@@ -30,6 +30,7 @@ private:
     vector<int> twoLargest(vector<double>chancein);
     char result(vector<int>);
     vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
+    vector<complex<double>> DFT(vector<complex<double>> sampleIn);
     int LargestInList(vector<double>list);
     vector<int> triWinFunk(vector<int> samp);
     vector<char> dumb(vector<char>list);
