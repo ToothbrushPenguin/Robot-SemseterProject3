@@ -27,7 +27,7 @@ public:
     vector<sf::Int16> g;
     vector<sf::Int16> h;
 
-    unsigned int samplerate = 8000;
+    unsigned int samplerate = 8192;
     int milisecondsPrBip = 25;
     int packetLength = milisecondsPrBip * samplerate/1000;
 

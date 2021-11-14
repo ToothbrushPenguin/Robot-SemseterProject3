@@ -34,7 +34,7 @@ private:
     vector<int> triWinFunk(vector<int> samp);
     vector<char> dumb(vector<char>list);
 
-    double samplerate = 8000;
+    double samplerate = 8192;
     vector<sf::Int16> firstsampel = {0};
     sf::SoundBuffer fsbuf;
 
