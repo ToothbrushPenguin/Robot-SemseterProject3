@@ -55,11 +55,11 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         }
                     }
 
-                    //ofstream samplefile;
-                    //samplefile.open ("samplefile.txt");
-                    //samplefile << out;
-                    //samplefile.close();
-                    //cout << "Should work" << endl;
+                    ofstream samplefile;
+                    samplefile.open ("samplefile.txt");
+                    samplefile << out;
+                    samplefile.close();
+                    cout << "Samplefile printed" << endl;
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
