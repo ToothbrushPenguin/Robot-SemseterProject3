@@ -16,7 +16,6 @@ bool SignalRecoder::onStart()
 bool SignalRecoder::onProcessSamples(const int16_t *samples, size_t sampleCount)
 {
     const lock_guard<mutex> lock(mutexlock);
-    samp.clear();
     for(unsigned int j = 0; j < sampleCount; j++){
         samp.push_back(samples[j]);
     }
@@ -31,6 +30,8 @@ void SignalRecoder::onStop()
 vector<int> SignalRecoder::getSamp()
 {
     const lock_guard<mutex> lock(mutexlock);
-    return samp;
+    tempsamp = samp;
+    samp.clear();
+    return tempsamp;
 }
 
