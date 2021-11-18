@@ -129,8 +129,8 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     auto start = chrono::high_resolution_clock::now();
 
-    //fft = FastFourier(input);
-    fft = DFT(input);
+    fft = FastFourier(input);
+    //fft = DFT(input);
 
     auto stop = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);

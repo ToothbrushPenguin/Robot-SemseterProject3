@@ -17,10 +17,10 @@ int main()
 
     for(int i = 0; i < (int)msg.size(); i++){
 
-       // vector<char> incoded = handler.seqIncoder(msg[i], seq.getPN());
-       // incoded = handler.crcIncoder(incoded);
-       // incoded = handler.ssbit(incoded);
-        vector<char> incoded = handler.ssbit(msg[0]);
+        vector<char> incoded = handler.seqIncoder(msg[i], seq.getPN());
+        incoded = handler.crcIncoder(incoded);
+        incoded = handler.ssbit(incoded);
+        //vector<char> incoded = handler.ssbit(msg[0]);
 
         for(int j = 0; j < (int)incoded.size(); j++){
             cout << incoded.at(j);
