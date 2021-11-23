@@ -15,7 +15,7 @@ BufferMsg::BufferMsg()
 
 vector<char> BufferMsg::SignalRecord(int timeout)
 {    
-    int sleeptime = 50;
+    int sleeptime = 15;
     bool toggle = 0;
     int time = 0;
     vector<char> msg = {};
@@ -27,18 +27,20 @@ vector<char> BufferMsg::SignalRecord(int timeout)
 
             vector<int> temprec = recorder.getSamp();
 
-            for(uint i = 0; i < temprec.size(); i++){
-                if(i == temprec.size()-1){
-                    samplefile << temprec[i];
-                }else{
-                samplefile <<temprec[i]<<", " ;}
-            }
+            //for(uint i = 0; i < temprec.size(); i++){
+            //    if(i == temprec.size()-1){
+            //       samplefile << temprec[i];
+            //    }else{
+            //    samplefile <<temprec[i]<<", " ;}
+            //}
 
             for(unsigned int i = 0; i < temprec.size(); i++){
                 rec.push_back(temprec.at(i));
             }
 
             fsout = FourierSplit(rec);
+
+            cout << " fsout " <<fsout[0] << fsout[1] << endl;
 
             for(int i = 0; i < oldrecLength; i++){
                 rec.erase(rec.begin());
@@ -50,9 +52,19 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             if(fsout.size()==2){
                 if(result(fsout) == '#'){//stop bit
                     vector<char> d = dumb(msg);
+
+                    cout << endl <<"aa1ab126241"<< endl;
                     for(uint i = 0; i < d.size(); i++){
                         cout << d.at(i);
                     }
+                    cout << endl;
+                    for(uint i = 0; i < msg.size(); i++){
+                        cout << msg.at(i);
+                    }
+
+
+
+
                     return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
@@ -127,55 +139,86 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
 
 
-    auto start = chrono::high_resolution_clock::now();
+    //auto start = chrono::high_resolution_clock::now();
 
-    fft = FastFourier(input);
-    //fft = DFT(input);
+    //fft = FastFourier(input);
+    fft = DFT(input);
 
-    auto stop = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
-    //cout << "Time: " << duration.count() << endl;
-
-
-
-    for(int i = 0; i < Fn-1; i++){
-        chanceoffrek.push_back((abs(pow(fft[i],2)))/fft.size());//chanceoffrek.push_back((abs(fft[i])*2)/fft.size());
+    vector<double> amps = {};
+    for(uint i = 0; i < fft.size(); i++){
+        amps.push_back(abs(fft[i]));
     }
-
-
-
-    for(int i = 0; i < padSide; i++){
-        avchanceoffrek.push_back(chanceoffrek.at(i));
-
-    }
-    for(unsigned int i = padSide; i < chanceoffrek.size()-padSide; i++){
-        double sum = 0;
-        int devider = 0;
-        for(int j = -padSide; j <= padSide; j++){
-            sum += chanceoffrek.at(i+j);
-            devider++;
+    int largestIdx = LargestInList(amps);
+    int largestAmp = amps[largestIdx];
+    amps[largestIdx] = 0;
+    int secLargestIdx = LargestInList(amps);
+    amps[largestIdx] = largestAmp;
+    cout << amps[secLargestIdx] << endl;
+    if(amps[secLargestIdx] > 710){
+        vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
+        int first = freqs[largestIdx];
+        int second = freqs[secLargestIdx];
+        for(uint i = 0; i < amps.size(); i++){
+            cout << amps[i] << " ";
         }
-        avchanceoffrek.push_back(sum/devider);
+        cout << endl;
+        if(largestIdx < secLargestIdx && largestIdx < 4 && secLargestIdx >= 4){
+            return {first, second};
+        }else if(secLargestIdx < largestIdx && secLargestIdx < 4 && largestIdx >= 4){
+            return {second, first};
+        }else{
+            return {0,0};
+        }
+
+    }else{
+        return {0,0};
     }
-    for(unsigned int i = chanceoffrek.size()-padSide; i < chanceoffrek.size(); i++){
-        avchanceoffrek.push_back(chanceoffrek.at(i));
-    }
 
 
-    //print----
-//    samplefile << "{\"";
-//    for(uint i = 0; i < avchanceoffrek.size(); i++){
-//        if(i == avchanceoffrek.size()-1){
-//            samplefile << avchanceoffrek[i];
-//        }else{
-//        samplefile <<avchanceoffrek[i]<<", " ;}
-//    }
-//    samplefile << "\"}," << endl;
-    //--------
-
-
-
-    return twoLargest(avchanceoffrek);
+   // auto stop = chrono::high_resolution_clock::now();
+   // auto duration = chrono::duration_cast<chrono::microseconds>(stop-start);
+   // //cout << "Time: " << duration.count() << endl;
+   //
+   //
+   //
+   // for(int i = 0; i < Fn-1; i++){
+   //     chanceoffrek.push_back((abs(pow(fft[i],2)))/fft.size());//chanceoffrek.push_back((abs(fft[i])*2)/fft.size());
+   // }
+   //
+   //
+   //
+   // for(int i = 0; i < padSide; i++){
+   //     avchanceoffrek.push_back(chanceoffrek.at(i));
+   //
+   // }
+   // for(unsigned int i = padSide; i < chanceoffrek.size()-padSide; i++){
+   //     double sum = 0;
+   //     int devider = 0;
+   //     for(int j = -padSide; j <= padSide; j++){
+   //         sum += chanceoffrek.at(i+j);
+   //         devider++;
+   //     }
+   //     avchanceoffrek.push_back(sum/devider);
+   // }
+   // for(unsigned int i = chanceoffrek.size()-padSide; i < chanceoffrek.size(); i++){
+   //     avchanceoffrek.push_back(chanceoffrek.at(i));
+   // }
+   //
+   //
+   // //print----
+   // samplefile << "{\"";
+   // for(uint i = 0; i < avchanceoffrek.size(); i++){
+   //     if(i == avchanceoffrek.size()-1){
+   //         samplefile << avchanceoffrek[i];
+   //     }else{
+   //     samplefile <<avchanceoffrek[i]<<", " ;}
+   // }
+   // samplefile << "\"}," << endl;
+   // //--------
+   //
+   //
+   //
+   // return twoLargest(avchanceoffrek);
 }
 
 vector<int> BufferMsg::twoLargest(vector<double> chancein)
@@ -372,10 +415,10 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
         complex<double> temp(re, im);
         output.push_back(temp);
     }
-    for(uint i = 0; i < output.size(); i++){
-        cout << abs(output[i]) << " ";
-    }
-    cout << endl;
+    //for(uint i = 0; i < output.size(); i++){
+    //    cout << abs(output[i]) << " ";
+    //}
+    //cout << endl;
     return output;
 }
 
@@ -397,13 +440,6 @@ vector<int> BufferMsg::triWinFunk(vector<int> samp)
 {
     vector<int> nsamp={};
     int n=samp.size();
-    //for(int i = 0; i < (int)samp.size();i++){
-    //    if(i<n/2){
-    //        nsamp.push_back(samp.at(i)*(2*(i/(n-1))));
-    //    }else{
-    //        nsamp.push_back(samp.at(i)*(2-(2*(i/(n-1)))));
-    //    }
-    //}
 
     for(int i = 0; i < (int)samp.size();i++){
     nsamp.push_back(samp.at(i)*(0.5*(1-cos(2*M_PI*i/(n-1)))));
@@ -421,6 +457,7 @@ vector<char> BufferMsg::dumb(vector<char> list)
     int c;
 
     for(uint i = 0;i<d;i++){
+        if(!(tL[i]=='N')){//skal fjernes
         if(!(i==d-1)){
             if(tL.at(i) == tL.at(i+1)){
                 c = 1;
@@ -439,6 +476,7 @@ vector<char> BufferMsg::dumb(vector<char> list)
             }else{fL.push_back(tL.at(i));}
         }else{fL.push_back(tL.at(i));}
    }
+    }//skal fjernes
     return fL;
 }
 
