@@ -13,9 +13,9 @@
 using namespace std;
 using json = nlohmann::json;
 
-//const string ADDRESS { "tcp://192.168.109.105:1883" }; Krispy netværk
-const string ADDRESS { "tcp://localhost:1883" };
-//const string ADDRESS { "tcp://192.168.176.105:1883" };
+
+//const string ADDRESS { "tcp://localhost:1883" };
+const string ADDRESS { "tcp://192.168.227.105:1883" };
 const string TOPIC { "cmd_vel" };
 const int QOS = 1;
 
@@ -29,12 +29,12 @@ public:
     RobotMovement(mqtt::async_client& client, mqtt::topic& topic);
     ~RobotMovement();
     json Move(bool dir, double  speed);
-    json Turn(bool dir, double turn);
+    json Turn(bool dir);
     //void Disconnect();
     void publishMessage(json j);
     bool Connect();
     void UdregningMove(int afstand, bool retning);
-    void UdregningTurn(int vinkel, bool retning);
+    void UdregningTurn(int vinkel);
     void sendMovement();
     void addMovement(int afstand, bool retning);
     void addTurn(int vinkel, bool retning);
@@ -47,8 +47,9 @@ private:
     double rest;
     bool retning;
     int dist;
+    double turnSpeed = 1.63;
     double restfart;
-    int antalOmdrejninger = 1;
+    int antalOmdrejninger = 0;
     vector<int> afstandVec;
     vector<int> vinkelVec;
     vector<bool> retningVec;

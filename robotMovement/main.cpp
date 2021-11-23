@@ -43,14 +43,17 @@ int main()
 
                           //Gøgl jeg har lavet til testning
     bool forward = true;
-    bool left = true;
+    bool backward = false;
+    bool right = true;
+    bool left = false;
 
-    ex.addMovement(20, forward);
-    ex.addMovement(100, forward);
-    ex.addMovement(15, forward);
-    ex.addTurn(360, left);
-    ex.addMovement(15, forward);
 
+    ex.addMovement(300, forward);
+    ex.addTurn(2, left);
+    ex.addMovement(200, forward);
+    ex.addTurn(2, right);
+    ex.addMovement(300, forward);
+    ex.addTurn(8, right);
     ex.sendMovement();
 
 }
