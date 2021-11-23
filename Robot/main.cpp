@@ -46,8 +46,14 @@ int main()
                       //besked modtagelse
 
     //while(boolW){
+    vector<char> message;
+        for (int i = 0;i<20;i++){
+            message = bM.SignalRecord();
+            cout <<endl<<"Number: " <<i+1<<endl;
+            bM.getStats();
+            this_thread::sleep_for(chrono::milliseconds(1000));
+        }
 
-        vector<char> message = bM.SignalRecord();
 
         //handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------

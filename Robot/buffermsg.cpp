@@ -62,7 +62,11 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         cout << msg.at(i);
                     }
 
-
+                    if(dumb(msg)==succes){//For testing purposes
+                        succ++;
+                    }else{
+                        fail++;
+                    }
 
 
                     return dumb(msg);
@@ -154,7 +158,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     int secLargestIdx = LargestInList(amps);
     amps[largestIdx] = largestAmp;
     cout << amps[secLargestIdx] << endl;
-    if(amps[secLargestIdx] > 710){
+    if(amps[secLargestIdx] > 60000){
         vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];
@@ -479,5 +483,15 @@ vector<char> BufferMsg::dumb(vector<char> list)
     }//skal fjernes
     return fL;
 }
+
+void BufferMsg::getStats()//DELETE FOR TESTING
+{
+    if(!(succ==0)&&!(fail==0)){
+        cout << "Suceeded: " << succ <<" Failed: " << fail <<endl <<" Ratio: "<< (succ/(fail+succ))*100 << "%"<< endl;
+    }else{
+        cout << "Suceeded: " << succ <<" Failed: " << fail <<endl;
+    }
+}
+
 
 

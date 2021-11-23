@@ -25,6 +25,7 @@ public:
     vector<char> SignalRecord(int timeout = -1);
     ~BufferMsg();
 
+    void getStats();//SKAL FJERNES STATS`
 private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
     vector<int> twoLargest(vector<double>chancein);
@@ -47,6 +48,10 @@ private:
 
     //skal fjernes
     ofstream samplefile;
+
+    double succ = 0;
+    double fail = 0;
+    vector<char> succes ={'a','a','1','a','b','1','2','6','2','4','1'};
 
 };
 
