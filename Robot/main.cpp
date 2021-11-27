@@ -47,7 +47,7 @@ int main()
 
     //while(boolW){
     vector<char> message;
-        for (int i = 0;i<20;i++){
+        for (int i = 0;i<50;i++){
             message = bM.SignalRecord();
             cout <<endl<<"Number: " <<i+1<<endl;
             bM.getStats();
