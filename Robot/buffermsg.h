@@ -51,9 +51,7 @@ private:
 
     double succ = 0;
     double fail = 0;
-    vector<char> succes ={'c','c','6','a','b','1','5','6','9','9','7'};
-
-    vector<vector<char>> fails={};
+    vector<char> succes ={'a','1','a','b','1','2','2','8','1','8'};
 
 };
 

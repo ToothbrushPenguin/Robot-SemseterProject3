@@ -1,4 +1,4 @@
-#include "buffermsg.h"
+﻿#include "buffermsg.h"
 
 BufferMsg::BufferMsg()
 {
@@ -14,18 +14,16 @@ BufferMsg::BufferMsg()
 }
 
 vector<char> BufferMsg::SignalRecord(int timeout)
-{    
-    int sleeptime = 20;
-    int sleepOffset = 0;
-    //int sleepoffset = 0;
+{
+    int sleeptime = 12;
     bool toggle = 0;
     int time = 0;
     vector<char> msg = {};
         while(timeout == -1 || time < timeout){
+
             time += sleeptime;
+            this_thread::sleep_for(chrono::milliseconds(sleeptime));
 
-
-            auto start = chrono::high_resolution_clock::now();
 
             vector<int> temprec = recorder.getSamp();
 
@@ -55,7 +53,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 if(result(fsout) == '#'){//stop bit
                     vector<char> d = dumb(msg);
 
-                    cout << endl <<"cc6ab156997"<< endl;
+                    cout << endl <<"a1ab122818"<< endl;
                     for(uint i = 0; i < d.size(); i++){
                         cout << d.at(i);
                     }
@@ -64,21 +62,14 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         cout << msg.at(i);
                     }
 
-
                     if(dumb(msg)==succes){//For testing purposes
                         succ++;
                     }else{
                         fail++;
-                        fails.push_back(d);
-                        fails.push_back(msg);
                     }
 
-                    auto stop = chrono::high_resolution_clock::now();
-                    auto duration = chrono::duration_cast<chrono::milliseconds>(stop-start);
-                    sleepOffset = duration.count();
-                    this_thread::sleep_for(chrono::milliseconds(sleeptime-sleepOffset));
 
-                    return d;
+                    return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
@@ -99,13 +90,9 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
-                }               
+                }
             }
 
-            auto stop = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::milliseconds>(stop-start);
-            sleepOffset = duration.count();
-            this_thread::sleep_for(chrono::milliseconds(sleeptime-sleepOffset));
         }
         return {'0'};
 }
@@ -149,10 +136,11 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)nsamples[i]);
     }
-    cout <<"EEEEEEEE: " <<input.size() << endl;
+
     for(int i = 0; i < npad; i++){
         input.push_back(0.);
     }
+
 
 
     //auto start = chrono::high_resolution_clock::now();
@@ -170,7 +158,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     int secLargestIdx = LargestInList(amps);
     amps[largestIdx] = largestAmp;
     cout << amps[secLargestIdx] << endl;
-    if(amps[secLargestIdx] > 65000){
+    if(amps[secLargestIdx] > 60000){
         vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];
@@ -243,8 +231,8 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
     double lowerRatio = 3;
 
     //de 8 frekvnesers værdi
-    vector<double> eightL={};
-    vector<int> eightLFrek={};
+    vector<double> eightotalList={};
+    vector<int> eightotalListFrek={};
     double avgL=0;
     vector<double> eightH={};
     vector<int> eightHFrek={};
@@ -253,23 +241,23 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
     for(unsigned int i = 0; i<=chancein.size();i++){
         switch (i) {
         case 697:
-            eightL.push_back(chancein[i]);
-            eightLFrek.push_back(697);
+            eightotalList.push_back(chancein[i]);
+            eightotalListFrek.push_back(697);
             avgL+=chancein[i];
             break;
         case 770:
-            eightL.push_back(chancein[i]);
-            eightLFrek.push_back(770);
+            eightotalList.push_back(chancein[i]);
+            eightotalListFrek.push_back(770);
             avgL+=chancein[i];
             break;
         case 852:
-            eightL.push_back(chancein[i]);
-            eightLFrek.push_back(852);
+            eightotalList.push_back(chancein[i]);
+            eightotalListFrek.push_back(852);
             avgL+=chancein[i];
             break;
         case 941:
-            eightL.push_back(chancein[i]);
-            eightLFrek.push_back(941);
+            eightotalList.push_back(chancein[i]);
+            eightotalListFrek.push_back(941);
             avgL+=chancein[i];
             break;
         case 1209:
@@ -301,16 +289,16 @@ vector<int> BufferMsg::twoLargest(vector<double> chancein)
     avgL=avgL/4;
     avgH=avgH/4;
 
-    int largestIDXL = LargestInList(eightL);
+    int largestIDXL = LargestInList(eightotalList);
     int largestIDXH = LargestInList(eightH);
 
     //cout << " H: " <<avgH << endl <<" L: " << avgL << endl;
     //cout << " H: " <<largestIDXH << endl <<" L: " << largestIDXL << endl;
-    //cout << " H: " <<eightHFrek[largestIDXH] <<" L: " << eightLFrek[largestIDXL] << endl;
+    //cout << " H: " <<eightHFrek[largestIDXH] <<" L: " << eightotalListFrek[largestIDXL] << endl;
 
-    if((eightL[largestIDXL]>avgL*lowerRatio && eightL[largestIDXL]>lowerBound) && (eightH[largestIDXH]>avgH*lowerRatio && eightH[largestIDXH]>lowerBound)){
+    if((eightotalList[largestIDXL]>avgL*lowerRatio && eightotalList[largestIDXL]>lowerBound) && (eightH[largestIDXH]>avgH*lowerRatio && eightH[largestIDXH]>lowerBound)){
 
-        return{eightLFrek[largestIDXL],eightHFrek[largestIDXH]};
+        return{eightotalListFrek[largestIDXL],eightHFrek[largestIDXH]};
     }
     return{0,0};
 
@@ -431,9 +419,12 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
         complex<double> temp(re, im);
         output.push_back(temp);
     }
+    //for(uint i = 0; i < output.size(); i++){
+    //    cout << abs(output[i]) << " ";
+    //}
+    //cout << endl;
     return output;
 }
-
 
 int BufferMsg::LargestInList(vector<double> list)
 {
@@ -463,33 +454,34 @@ vector<int> BufferMsg::triWinFunk(vector<int> samp)
 
 vector<char> BufferMsg::dumb(vector<char> list)
 {
-    vector<char> tL = list;
-    vector<char> fL;
-    uint d = list.size();
-    int c;
+    vector<char> totalList = list;
+    vector<char> finalList;
+    uint listLength = list.size();
+    int count;
 
-    for(uint i = 0;i<d;i++){
-        if(!(tL[i]=='N')){//skal fjernes
-            if(!(i==d-1)){
-                if(tL.at(i) == tL.at(i+1)){
-                    c = 1;
-                    while(tL.at(i+1)==tL.at(i)){
-                        if(i==d-2){
-                            i++;
-                            c++;
-                            break;
-                        }
+    for(uint i = 0;i<listLength;i++){
+        if(!(totalList[i]=='N')){//skal fjernes
+        if(!(i==listLength-1)){
+            if(totalList.at(i) == totalList.at(i+1)){
+                count = 1;
+                while(totalList.at(i+1)==totalList.at(i)){
+                    if(i==listLength-2){
                         i++;
-                        c++;
+                        count++;
+                        break;
                     }
-                    for (int j = 0; j<c/2;j++){
-                        fL.push_back(tL.at(i));
-                    }
-                }else{fL.push_back(tL.at(i));}
-            }else{fL.push_back(tL.at(i));}
-        }
+                    i++;
+                    count++;
+                }
+                //for(int j = 0; j<round((double)count/2);j++){
+                for(int j = 0; j<count/2;j++){
+                    finalList.push_back(totalList.at(i));
+                }
+            }else{finalList.push_back(totalList.at(i));}
+        }else{finalList.push_back(totalList.at(i));}
+   }
     }//skal fjernes
-    return fL;
+    return finalList;
 }
 
 void BufferMsg::getStats()//DELETE FOR TESTING
@@ -498,13 +490,6 @@ void BufferMsg::getStats()//DELETE FOR TESTING
         cout << "Suceeded: " << succ <<" Failed: " << fail <<endl <<" Ratio: "<< (succ/(fail+succ))*100 << "%"<< endl;
     }else{
         cout << "Suceeded: " << succ <<" Failed: " << fail <<endl;
-    }
-
-    for(unsigned int j = 0; j<fails.size();j++){
-        for(unsigned int i = 0; i<fails.at(j).size();i++){
-            cout << fails.at(j).at(i);
-        }
-        cout << endl;
     }
 }
 
