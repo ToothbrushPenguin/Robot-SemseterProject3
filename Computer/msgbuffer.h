@@ -12,6 +12,9 @@ class MsgBuffer
 public:
     MsgBuffer();
     sf::SoundBuffer convert(vector<char>message);
+    vector<sf::Int16> triWinFunk(vector<sf::Int16> samp);
+
+
 
     vector<sf::Int16> a;
     vector<sf::Int16> b;

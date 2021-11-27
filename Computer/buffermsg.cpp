@@ -10,7 +10,7 @@ BufferMsg::BufferMsg()
 }
 
 vector<char> BufferMsg::SignalRecord(int timeout)
-{    
+{
     int sleeptime = 15;
     bool toggle = 0;
     int time = 0;
@@ -49,7 +49,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 }
                 if(result(fsout) == '*'){
                     toggle = 1;
-                }               
+                }
             }
 
         }

@@ -17,6 +17,18 @@ MsgBuffer::MsgBuffer()
     }
 }
 
+vector<sf::Int16> MsgBuffer::triWinFunk(vector<sf::Int16> samp)
+{
+    vector<sf::Int16> nsamp={};
+    int n=samp.size();
+
+    for(int i = 0; i < (int)samp.size();i++){
+    nsamp.push_back(samp.at(i)*(0.5*(1-cos(2*M_PI*i/(n-1)))));
+    }
+
+    return nsamp;
+}
+
 sf::SoundBuffer MsgBuffer::convert( vector<char> message )
 {
 
@@ -49,6 +61,7 @@ sf::SoundBuffer MsgBuffer::convert( vector<char> message )
         for(int n = 0; n < packetLength; n++ ){
         samplesAll.push_back(f1Lf[n]+f2Hf[n]);
         }    
+        samplesAll=triWinFunk(samplesAll);
 
     }
 
