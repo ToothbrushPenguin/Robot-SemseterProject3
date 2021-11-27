@@ -15,15 +15,17 @@ BufferMsg::BufferMsg()
 
 vector<char> BufferMsg::SignalRecord(int timeout)
 {    
-    int sleeptime = 15;
+    int sleeptime = 20;
+    int sleepOffset = 0;
+    //int sleepoffset = 0;
     bool toggle = 0;
     int time = 0;
     vector<char> msg = {};
         while(timeout == -1 || time < timeout){
-
             time += sleeptime;
-            this_thread::sleep_for(chrono::milliseconds(sleeptime));
 
+
+            auto start = chrono::high_resolution_clock::now();
 
             vector<int> temprec = recorder.getSamp();
 
@@ -53,7 +55,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 if(result(fsout) == '#'){//stop bit
                     vector<char> d = dumb(msg);
 
-                    cout << endl <<"aa1ab126241"<< endl;
+                    cout << endl <<"cc6ab156997"<< endl;
                     for(uint i = 0; i < d.size(); i++){
                         cout << d.at(i);
                     }
@@ -62,14 +64,21 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         cout << msg.at(i);
                     }
 
+
                     if(dumb(msg)==succes){//For testing purposes
                         succ++;
                     }else{
                         fail++;
+                        fails.push_back(d);
+                        fails.push_back(msg);
                     }
 
+                    auto stop = chrono::high_resolution_clock::now();
+                    auto duration = chrono::duration_cast<chrono::milliseconds>(stop-start);
+                    sleepOffset = duration.count();
+                    this_thread::sleep_for(chrono::milliseconds(sleeptime-sleepOffset));
 
-                    return dumb(msg);
+                    return d;
                 }
                 if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
@@ -93,6 +102,10 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 }               
             }
 
+            auto stop = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::milliseconds>(stop-start);
+            sleepOffset = duration.count();
+            this_thread::sleep_for(chrono::milliseconds(sleeptime-sleepOffset));
         }
         return {'0'};
 }
@@ -136,11 +149,10 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)nsamples[i]);
     }
-
+    cout <<"EEEEEEEE: " <<input.size() << endl;
     for(int i = 0; i < npad; i++){
         input.push_back(0.);
     }
-
 
 
     //auto start = chrono::high_resolution_clock::now();
@@ -158,7 +170,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     int secLargestIdx = LargestInList(amps);
     amps[largestIdx] = largestAmp;
     cout << amps[secLargestIdx] << endl;
-    if(amps[secLargestIdx] > 60000){
+    if(amps[secLargestIdx] > 65000){
         vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];
@@ -419,12 +431,9 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
         complex<double> temp(re, im);
         output.push_back(temp);
     }
-    //for(uint i = 0; i < output.size(); i++){
-    //    cout << abs(output[i]) << " ";
-    //}
-    //cout << endl;
     return output;
 }
+
 
 int BufferMsg::LargestInList(vector<double> list)
 {
@@ -449,7 +458,6 @@ vector<int> BufferMsg::triWinFunk(vector<int> samp)
     nsamp.push_back(samp.at(i)*(0.5*(1-cos(2*M_PI*i/(n-1)))));
     }
 
-
     return nsamp;
 }
 
@@ -462,24 +470,24 @@ vector<char> BufferMsg::dumb(vector<char> list)
 
     for(uint i = 0;i<d;i++){
         if(!(tL[i]=='N')){//skal fjernes
-        if(!(i==d-1)){
-            if(tL.at(i) == tL.at(i+1)){
-                c = 1;
-                while(tL.at(i+1)==tL.at(i)){
-                    if(i==d-2){
+            if(!(i==d-1)){
+                if(tL.at(i) == tL.at(i+1)){
+                    c = 1;
+                    while(tL.at(i+1)==tL.at(i)){
+                        if(i==d-2){
+                            i++;
+                            c++;
+                            break;
+                        }
                         i++;
                         c++;
-                        break;
                     }
-                    i++;
-                    c++;
-                }
-                for (int j = 0; j<c/2;j++){
-                    fL.push_back(tL.at(i));
-                }
+                    for (int j = 0; j<c/2;j++){
+                        fL.push_back(tL.at(i));
+                    }
+                }else{fL.push_back(tL.at(i));}
             }else{fL.push_back(tL.at(i));}
-        }else{fL.push_back(tL.at(i));}
-   }
+        }
     }//skal fjernes
     return fL;
 }
@@ -490,6 +498,13 @@ void BufferMsg::getStats()//DELETE FOR TESTING
         cout << "Suceeded: " << succ <<" Failed: " << fail <<endl <<" Ratio: "<< (succ/(fail+succ))*100 << "%"<< endl;
     }else{
         cout << "Suceeded: " << succ <<" Failed: " << fail <<endl;
+    }
+
+    for(unsigned int j = 0; j<fails.size();j++){
+        for(unsigned int i = 0; i<fails.at(j).size();i++){
+            cout << fails.at(j).at(i);
+        }
+        cout << endl;
     }
 }
 

@@ -13,9 +13,6 @@ public:
     MsgBuffer();
     sf::SoundBuffer convert(vector<char>message);
 
-
-
-
     vector<sf::Int16> a;
     vector<sf::Int16> b;
     vector<sf::Int16> c;
