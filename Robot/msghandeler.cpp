@@ -15,9 +15,9 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
     vector<char> inc;
     if(crc){
-        inc ={'a','b', (char)(readPn+48)};
+        inc ={(char)(readPn+48)};
     }else{
-        inc ={'a','b','0'};
+        inc ={'0'};
     }
     vector<char> incs = crcIncoder(inc);
     for (uint i = 0; i < incs.size(); i++){
@@ -33,7 +33,7 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
 State MsgHandeler::isStop(vector<char> in)
 {
-    string stop = "ad";
+    string stop = "abc";
     string curStr;
     curStr.push_back(in.at(0));
     curStr.push_back(in.at(1));
@@ -50,13 +50,13 @@ Direction MsgHandeler::DecodeMovement(vector<char> in)
     string msgDir;
     msgDir.push_back(in.at(0));
     msgDir.push_back(in.at(1));
-    if(msgDir == "aa"){
+    if(msgDir == "a"){
         dir = LEFT;
-    }else if(msgDir == "bb"){
+    }else if(msgDir == "b"){
         dir = RIGHT;
-    }else if(msgDir == "cc"){
+    }else if(msgDir == "c"){
         dir = UP;
-    }else if(msgDir == "dd"){
+    }else if(msgDir == "d"){
         dir = DOWN;
     }else{
         dir = HALT;
@@ -117,8 +117,6 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
 {
 
     vector<char> msgout = msg;
-    msgout.push_back('a');
-    msgout.push_back('b');
     msgout.push_back((char)(pnIn+48));
 
     return msgout;
@@ -171,12 +169,8 @@ bool MsgHandeler::isValid(vector<char>in)
 
 int MsgHandeler::readPn(vector<char> msg)
 {
-    int pnout = 0;
-    for(unsigned int i = 1; i < msg.size()-5; i++){
-        if(msg[i-1] == 'a' && msg [i] == 'b'){
-            pnout = ((int)msg[i+1]-48);
-        }
-    }
+    int pnout = ((int)msg[msg.size()-6]-48);
+
     return pnout;
 }
 

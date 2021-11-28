@@ -8,14 +8,11 @@ SeqHandler::SeqHandler()
 bool SeqHandler::validatePN(vector<char> msg)
 {
     SeqHandler seq;
-    for(unsigned int i = 1; i < msg.size()-5; i++){
-        if(msg[i-1] == 'a' && msg [i] == 'b'){
-            int robPn = ((int)msg[i+1]-48);
-            if(robPn == pn){
-                seq.incPN();
-                return true;
-            }
-        }
+
+    int robPn = ((int)msg[msg.size()-6]-48);
+    if(robPn == pn){
+        seq.incPN();
+        return true;
     }
     return false;
 }
