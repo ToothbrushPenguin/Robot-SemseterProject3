@@ -12,10 +12,9 @@ class MsgBuffer
 public:
     MsgBuffer();
     sf::SoundBuffer convert(vector<char>message);
+    vector<sf::Int16> triWinFunk(vector<sf::Int16> samp);
 
 
-    sf::SoundBuffer buffer;
-    vector<sf::Int16> samplesAll;
 
     vector<sf::Int16> a;
     vector<sf::Int16> b;
@@ -27,9 +26,11 @@ public:
     vector<sf::Int16> g;
     vector<sf::Int16> h;
 
+    vector<sf::Int16> zero;
+
     unsigned int samplerate = 8192;
-    int milisecondsPrBip = 30;
-    int packetLength = milisecondsPrBip * samplerate/1000;
+    int milisecondsPrBip = 40;
+    int packetLength = milisecondsPrBip * (samplerate/1000);
 
 };
 

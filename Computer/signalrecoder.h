@@ -28,6 +28,7 @@ public:
     mutex mutexlock;
 
     vector<int> samp={0};
+    vector<int> tempsamp;
 
 };
 
