@@ -48,7 +48,7 @@ int main()
 
 
 
-        vector<char> robReply = bM.SignalRecord(500);
+        vector<char> robReply = bM.SignalRecord(1000);
 
         if(handler.isValid(robReply)){
             if(!seq.validatePN(robReply)){

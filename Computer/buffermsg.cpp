@@ -42,10 +42,10 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             cout << "{\""<<result(fsout)<<"\"}," << endl;
 
             if(fsout.size()==2){
-                if(result(fsout) == '#'){//stop bit
+                if(toggle == 1&&result(fsout) == '#'){//stop bit
                     vector<char> d = dumb(msg);
 
-                    cout << endl <<"a1ab122818"<< endl;
+                    cout << endl <<"a1159614"<< endl;
                     for(uint i = 0; i < d.size(); i++){
                         cout << d.at(i);
                     }

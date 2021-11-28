@@ -67,8 +67,8 @@ Direction MsgHandeler::DecodeMovement(vector<char> in)
 double MsgHandeler::decodeValue(vector<char> in)
 {
     double out=0;
-        for(unsigned int i = 0; i < in.size()-10; i++){
-            out+=(in.at(in.size()-8-i)-48)*pow(10,i);
+        for(unsigned int i = 0; i < in.size()-7; i++){
+            out+=(in.at(in.size()-7-i)-48)*pow(10,i);
         }
     return out;
 
