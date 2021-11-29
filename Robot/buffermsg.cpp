@@ -15,7 +15,7 @@ BufferMsg::BufferMsg()
 
 vector<char> BufferMsg::SignalRecord(int timeout)
 {
-    int sleeptime = 20;
+    int sleeptime = 25;
     int sleepOffset = 0;
     bool toggle = 0;
     int time = 0;
@@ -247,8 +247,8 @@ vector<char> BufferMsg::dumb(vector<char> list)
                     i++;
                     count++;
                 }
-                //for(int j = 0; j<round((double)count/2);j++){
-                for(int j = 0; j<count/2;j++){
+                for(int j = 0; j<round((double)count/2);j++){
+                //for(int j = 0; j<count/2;j++){
                     finalList.push_back(totalList.at(i));
                 }
             }else{finalList.push_back(totalList.at(i));}

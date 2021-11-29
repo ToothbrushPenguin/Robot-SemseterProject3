@@ -47,24 +47,26 @@ int main()
 
     //while(boolW){
     vector<char> message;
-        for (int i = 0;i<2;i++){
+        //for (int i = 0;i<200;i++){
             message = bM.SignalRecord();
-            cout <<endl<<"Number: " <<i+1<<endl;
-            bM.getStats();
+            //cout <<endl<<"Number: " <<i+1<<endl;
+            //bM.getStats();
             this_thread::sleep_for(chrono::milliseconds(1000));
-        }
+        //}
 
 
-        //handeler.handshake(handeler.isValid(message),handeler.readPn(message));
+            cout << endl << handeler.readPn(message) << endl;
+
+        handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------
 
-        //while(!(handeler.isValid(message))){
-        //   message = bM.SignalRecord();
-        //   handeler.handshake(handeler.isValid(message),handeler.readPn(message));
-        //}
+        while(!(handeler.isValid(message))){
+           message = bM.SignalRecord();
+           handeler.handshake(handeler.isValid(message),handeler.readPn(message));
+        }
         //------------
 
-        cout << handeler.decodeValue(message) << endl;
+        //cout << handeler.decodeValue(message) << endl;
 
         if(handeler.isStop(message) == RUNNING){
             dirs.push_back(handeler.DecodeMovement(message));
@@ -72,6 +74,8 @@ int main()
         }else if (handeler.isStop(message)== STOP){
             boolW = 0;
         }
+
+
     //}
 
     //for(unsigned int i = 0; i < dirs.size(); i++){
