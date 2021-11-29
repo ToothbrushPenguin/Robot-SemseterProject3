@@ -33,7 +33,7 @@ private:
     vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
     vector<complex<double>> DFT(vector<complex<double>> sampleIn);
     int LargestInList(vector<double>list);
-    vector<int> triWinFunk(vector<int> samp);
+    vector<int> winFunc(vector<int> samp);
     vector<char> dumb(vector<char>list);
 
     double samplerate = 8192;

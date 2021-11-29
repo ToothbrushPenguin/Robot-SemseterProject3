@@ -106,7 +106,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     vector<complex<double>> fft = {};
 
     vector<int> nsamples;
-    nsamples=triWinFunk(samples);
+    nsamples=winFunc(samples);
 
     for(int i = 0; i < oriL; i++){
         input.push_back((complex<double>)nsamples[i]);
@@ -214,7 +214,7 @@ int BufferMsg::LargestInList(vector<double> list)
     return largestIDX;
 }
 
-vector<int> BufferMsg::triWinFunk(vector<int> samp)
+vector<int> BufferMsg::winFunc(vector<int> samp)
 {
     vector<int> nsamp={};
     int n=samp.size();
