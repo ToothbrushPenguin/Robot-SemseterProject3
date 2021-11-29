@@ -28,7 +28,6 @@ public:
     void getStats();//SKAL FJERNES STATS`
 private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
-    vector<int> twoLargest(vector<double>chancein);
     char result(vector<int>);
     vector<complex<double>> FastFourier(vector<complex<double>> fsbuf);
     vector<complex<double>> DFT(vector<complex<double>> sampleIn);

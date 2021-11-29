@@ -60,7 +60,6 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                         fail++;
                     }
 
-
                     return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
@@ -99,11 +98,13 @@ BufferMsg::~BufferMsg()
 
 vector<int> BufferMsg::FourierSplit(vector<int> samples)
 {
+    vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
+
     int oriL = samples.size();
     int npad = samplerate - oriL;
 
     vector<complex<double>> input = {};
-    vector<complex<double>> fft = {};
+    vector<complex<double>> dft = {};
 
     vector<int> nsamples;
     nsamples=winFunc(samples);
@@ -116,20 +117,34 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
         input.push_back(0.);
     }
 
-    fft = DFT(input);
+    dft = DFT(input);
 
     vector<double> amps = {};
-    for(uint i = 0; i < fft.size(); i++){
-        amps.push_back(abs(fft[i]));
+
+    for(uint i = 0; i < dft.size(); i++){
+        amps.push_back(abs(dft[i]));
     }
+
     int largestIdx = LargestInList(amps);
     int largestAmp = amps[largestIdx];
     amps[largestIdx] = 0;
     int secLargestIdx = LargestInList(amps);
+    int secLargestAmp = amps[secLargestIdx];
     amps[largestIdx] = largestAmp;
-    cout << amps[secLargestIdx] << endl;
-    if(amps[secLargestIdx] > 60000){
-        vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
+
+    double avgBG = 0;
+    for(uint i = 0; i < freqs.size(); i++){
+        avgBG += amps[i]/(freqs.size()-2);
+    }
+
+    avgBG -= (largestAmp-secLargestAmp)/(freqs.size()-2);
+
+    cout << "Average BG x 3: " << 3*avgBG << endl;
+
+    cout << "second largest: " << amps[secLargestIdx] << endl;
+
+    if(amps[secLargestIdx] > 2.5*avgBG){
+
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];
         for(uint i = 0; i < amps.size(); i++){
@@ -147,11 +162,6 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
     }else{
         return {0,0};
     }
-}
-
-vector<int> BufferMsg::twoLargest(vector<double> chancein)
-{
-    return{0,0};
 }
 
 char BufferMsg::result(vector<int> frequency)
