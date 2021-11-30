@@ -46,6 +46,7 @@ State MsgHandeler::isStop(vector<char> in)
     string curStr;
     curStr.push_back(in.at(0));
     curStr.push_back(in.at(1));
+    curStr.push_back(in.at(2));
 
     if (curStr==stop){
         return STOP;
