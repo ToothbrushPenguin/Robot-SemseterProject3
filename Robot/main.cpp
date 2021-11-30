@@ -51,17 +51,16 @@ int main()
             message = bM.SignalRecord();
             //cout <<endl<<"Number: " <<i+1<<endl;
             //bM.getStats();
-            this_thread::sleep_for(chrono::milliseconds(1000));
         //}
 
 
-            cout << endl << handeler.readPn(message) << endl;
+            cout << endl << "pn: " << handeler.readPn(message) << endl;
 
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------
 
         while(!(handeler.isValid(message))){
-           message = bM.SignalRecord();
+           message = bM.SignalRecord(3000);
            handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         }
         //------------

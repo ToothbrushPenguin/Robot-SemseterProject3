@@ -16,11 +16,12 @@ void MsgHandeler::handshake(bool crc, int readPn)
     vector<char> inc;
     if(crc){
         inc = {*(to_string(readPn).c_str())};
+
     }else{
         inc ={'0'};
     }
-
     truFal = ssbit(crcIncoder(inc));
+    truFal.push_back('#');
     for(unsigned int u = 0; u< truFal.size(); u++){
     cout << truFal[u];
     }
