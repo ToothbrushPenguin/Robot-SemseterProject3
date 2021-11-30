@@ -26,7 +26,7 @@ int main()
             cout << incoded.at(j);
         }
         cout << endl<<endl;
-        cout << incoded.size() << endl;
+        cout <<incoded.size() << endl;
         //vector<char> incoded = handler.ssbit(msg[i]);
         sf::SoundBuffer buffer;
 
@@ -48,7 +48,7 @@ int main()
 
 
 
-        vector<char> robReply = bM.SignalRecord(1000);
+        vector<char> robReply = bM.SignalRecord(3000);
 
         if(handler.isValid(robReply)){
             if(!seq.validatePN(robReply)){

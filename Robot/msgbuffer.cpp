@@ -60,7 +60,7 @@ sf::SoundBuffer MsgBuffer::convert( vector<char> message )
 
         for(int n = 0; n < packetLength; n++ ){
         samplesAll.push_back(f1Lf[n]+f2Hf[n]);
-        }
+        }    
         samplesAll=winFunc(samplesAll);
 
     }

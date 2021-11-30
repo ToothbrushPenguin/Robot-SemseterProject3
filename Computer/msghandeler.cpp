@@ -11,23 +11,32 @@ void MsgHandeler::handshake(bool crc, int readPn)
     MsgBuffer buf;
     sf::SoundBuffer sBuf;
     sf::Sound sound;
-    vector<char> truFal = {'*'};
+    vector<char> truFal = {};
 
     vector<char> inc;
     if(crc){
-        inc ={(char)(readPn+48)};
+        inc = {*(to_string(readPn).c_str())};
     }else{
         inc ={'0'};
     }
-    vector<char> incs = crcIncoder(inc);
-    for (uint i = 0; i < incs.size(); i++){
-        truFal.push_back(incs.at(i));
-    } truFal.push_back('#');
 
-    sBuf = buf.convert({truFal});
-    sound.setBuffer(sBuf);
-    sound.play();
-    while(sound.getStatus()==2){
+    truFal = ssbit(crcIncoder(inc));
+    for(unsigned int u = 0; u< truFal.size(); u++){
+    cout << truFal[u];
+    }
+    cout << endl;
+
+
+
+    for(unsigned int u = 0; u< truFal.size(); u++){
+        sBuf = buf.convert({truFal[u]});
+
+        sound.setBuffer(sBuf);
+
+        sound.play();
+
+        while(sound.getStatus()==2){
+        }
     }
 }
 
