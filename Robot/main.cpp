@@ -60,19 +60,31 @@ int main()
         //------for test------
 
         while(!(handeler.isValid(message))){
-           message = bM.SignalRecord(3000);
-           handeler.handshake(handeler.isValid(message),handeler.readPn(message));
+
+            message = bM.SignalRecord(1500);
+
+            cout << "message: ";
+            for(uint i = 0; i < message.size(); i++){
+                cout << message[i];
+            }
+            cout << endl;
+
+            handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         }
         //------------
 
-        if(handeler.isStop(message) == RUNNING){
-            dirs.push_back(handeler.DecodeMovement(message));
-            vals.push_back(handeler.decodeValue(message));
-        }else if (handeler.isStop(message)== STOP){
-            boolW = 0;
-            for(int i=0; i<3; i++){
-                this_thread::sleep_for(chrono::milliseconds(1000));
-                handeler.handshake(1,handeler.readPn(message));
+        if(handeler.correctPn(handeler.readPn(message))){
+            if(handeler.isStop(message) == RUNNING){
+                handeler.incRobPn();
+                dirs.push_back(handeler.DecodeMovement(message));
+                vals.push_back(handeler.decodeValue(message));
+            }else if (handeler.isStop(message)== STOP){
+                handeler.resetRobPn();
+                boolW = 0;
+                for(int i=0; i<3; i++){
+                    this_thread::sleep_for(chrono::milliseconds(1000));
+                    handeler.handshake(1,handeler.readPn(message));
+                }
             }
         }
     }

@@ -15,22 +15,15 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
     vector<char> inc;
     if(crc){
-        if(correctPn(readPn)){
-            inc = {*(to_string(readPn).c_str())};
-        }else{
-            inc = {*(to_string(getRobPn()).c_str())};
-        }
-
+        inc = {*(to_string(readPn).c_str())};
     }else{
         inc ={'0'};
     }
-    cout << "PN: " << inc[0] << endl;
+    cout << "readPn: " << readPn << endl;
+    cout << "Ack number: " << inc[0] << endl;
     truFal = ssbit(crcIncoder(inc));
     truFal.push_back('#');
-    for(unsigned int u = 0; u< truFal.size(); u++){
-    cout << truFal[u];
-    }
-    cout << endl;
+    cout << "robPn: " << robPn << endl;
 
 
 
@@ -191,8 +184,7 @@ int MsgHandeler::readPn(vector<char> msg)
 
 bool MsgHandeler::correctPn(int readpn)
 {
-    if(readpn == robPn + 1){
-        incRobPn();
+    if((readpn == robPn + 1)||(readpn == 9 && robPn == 0)){
         return true;
     }
     return false;
@@ -205,7 +197,7 @@ void MsgHandeler::resetRobPn()
 
 void MsgHandeler::incRobPn()
 {
-    if(robPn == 9){
+    if(robPn >= 8){
         resetRobPn();
     }else{
         robPn++;
