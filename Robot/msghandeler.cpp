@@ -15,11 +15,16 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
     vector<char> inc;
     if(crc){
-        inc = {*(to_string(readPn).c_str())};
+        if(correctPn(readPn)){
+            inc = {*(to_string(readPn).c_str())};
+        }else{
+            inc = {*(to_string(getRobPn()).c_str())};
+        }
 
     }else{
         inc ={'0'};
     }
+    cout << "PN: " << inc[0] << endl;
     truFal = ssbit(crcIncoder(inc));
     truFal.push_back('#');
     for(unsigned int u = 0; u< truFal.size(); u++){
@@ -60,7 +65,6 @@ Direction MsgHandeler::DecodeMovement(vector<char> in)
     Direction dir;
     string msgDir;
     msgDir.push_back(in.at(0));
-    msgDir.push_back(in.at(1));
     if(msgDir == "a"){
         dir = LEFT;
     }else if(msgDir == "b"){
@@ -187,9 +191,8 @@ int MsgHandeler::readPn(vector<char> msg)
 
 bool MsgHandeler::correctPn(int readpn)
 {
-    MsgHandeler han;
     if(readpn == robPn + 1){
-        han.incRobPn();
+        incRobPn();
         return true;
     }
     return false;
@@ -197,7 +200,7 @@ bool MsgHandeler::correctPn(int readpn)
 
 void MsgHandeler::resetRobPn()
 {
-    robPn = 1;
+    robPn = 0;
 }
 
 void MsgHandeler::incRobPn()
