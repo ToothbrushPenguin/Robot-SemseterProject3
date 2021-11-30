@@ -25,7 +25,6 @@ public:
     vector<char> SignalRecord(int timeout = -1);
     ~BufferMsg();
 
-    void getStats();//SKAL FJERNES STATS`
 private:
     vector<int> FourierSplit(vector<int> fsbuf);//retunere de 2 frekvencer
     char result(vector<int>);

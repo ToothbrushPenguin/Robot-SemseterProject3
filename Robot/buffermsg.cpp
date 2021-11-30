@@ -32,34 +32,13 @@ vector<char> BufferMsg::SignalRecord(int timeout)
 
             fsout = FourierSplit(rec);
 
-            cout << " fsout " <<fsout[0] << fsout[1] << endl;
-
             for(int i = 0; i < oldrecLength; i++){
                 rec.erase(rec.begin());
             }
             oldrecLength = rec.size();
 
-            cout << "{\""<<result(fsout)<<"\"}," << endl;
-
             if(fsout.size()==2){
                 if(toggle == 1&&result(fsout) == '#'){//stop bit
-                    vector<char> d = dumb(msg);
-
-                    cout << endl <<"a1159614"<< endl;
-                    for(uint i = 0; i < d.size(); i++){
-                        cout << d.at(i);
-                    }
-                    cout << endl;
-                    for(uint i = 0; i < msg.size(); i++){
-                        cout << msg.at(i);
-                    }
-
-                    if(dumb(msg)==succes){//For testing purposes
-                        succ++;
-                    }else{
-                        fail++;
-                    }
-
                     return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
@@ -139,18 +118,11 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     avgBG -= (largestAmp-secLargestAmp)/(freqs.size()-2);
 
-    cout << "Average BG x 3: " << 3*avgBG << endl;
-
-    cout << "second largest: " << amps[secLargestIdx] << endl;
-
     if(amps[secLargestIdx] > 2.5*avgBG){
 
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];
-        for(uint i = 0; i < amps.size(); i++){
-            cout << amps[i] << " ";
-        }
-        cout << endl;
+
         if(largestIdx < secLargestIdx && largestIdx < 4 && secLargestIdx >= 4){
             return {first, second};
         }else if(secLargestIdx < largestIdx && secLargestIdx < 4 && largestIdx >= 4){
@@ -212,7 +184,7 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
 
 int BufferMsg::LargestInList(vector<double> list)
 {
-    //finding the largest value of a lsit and return the index of it
+    //finding the largest value of a list and return the index of it
     double largest=0;
     int largestIDX=0;
     for(unsigned int i = 0; i<list.size();i++){
@@ -244,38 +216,30 @@ vector<char> BufferMsg::dumb(vector<char> list)
     int count;
 
     for(uint i = 0;i<listLength;i++){
-        if(!(totalList[i]=='N')){//skal fjernes
-        if(!(i==listLength-1)){
-            if(totalList.at(i) == totalList.at(i+1)){
-                count = 1;
-                while(totalList.at(i+1)==totalList.at(i)){
-                    if(i==listLength-2){
+        if(!(totalList[i]=='N')){
+            if(!(i==listLength-1)){
+                if(totalList.at(i) == totalList.at(i+1)){
+                    count = 1;
+                    while(totalList.at(i+1)==totalList.at(i)){
+                        if(i==listLength-2){
+                            i++;
+                            count++;
+                            break;
+                        }
                         i++;
                         count++;
-                        break;
                     }
-                    i++;
-                    count++;
-                }
-                for(int j = 0; j<round((double)count/2);j++){
-                //for(int j = 0; j<count/2;j++){
-                    finalList.push_back(totalList.at(i));
-                }
+                    for(int j = 0; j<round((double)count/2);j++){
+                    //for(int j = 0; j<count/2;j++){
+                        finalList.push_back(totalList.at(i));
+                    }
+                }else{finalList.push_back(totalList.at(i));}
             }else{finalList.push_back(totalList.at(i));}
-        }else{finalList.push_back(totalList.at(i));}
-   }
-    }//skal fjernes
+        }
+    }
     return finalList;
 }
 
-void BufferMsg::getStats()//DELETE FOR TESTING
-{
-    if(!(succ==0)&&!(fail==0)){
-        cout << "Suceeded: " << succ <<" Failed: " << fail <<endl <<" Ratio: "<< (succ/(fail+succ))*100 << "%"<< endl;
-    }else{
-        cout << "Suceeded: " << succ <<" Failed: " << fail <<endl;
-    }
-}
 
 
 

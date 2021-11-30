@@ -47,14 +47,8 @@ int main()
 
     //while(boolW){
     vector<char> message;
-        //for (int i = 0;i<200;i++){
-            message = bM.SignalRecord();
-            //cout <<endl<<"Number: " <<i+1<<endl;
-            //bM.getStats();
-        //}
 
-
-            cout << endl << "pn: " << handeler.readPn(message) << endl;
+        message = bM.SignalRecord();
 
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------
