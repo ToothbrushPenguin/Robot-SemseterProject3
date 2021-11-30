@@ -21,15 +21,9 @@ void MsgHandeler::handshake(bool crc, int readPn)
     }
 
     truFal = ssbit(crcIncoder(inc));
-    for(unsigned int u = 0; u< truFal.size(); u++){
-    cout << truFal[u];
-    }
-    cout << endl;
-
-
 
     for(unsigned int u = 0; u< truFal.size(); u++){
-        sBuf = buf.convert({truFal[u]});
+        sBuf = buf.convert(truFal[u]);
 
         sound.setBuffer(sBuf);
 
@@ -151,17 +145,17 @@ bool MsgHandeler::isValid(vector<char>in)
     unsigned long value=0;
     unsigned long divider = 65521;
 
-    if(in.size()==1 && in[0] == '0'){
+    if((in.size()==1 && in[0] == '0')||in.size()<6){
         return 0;
     }
 
     for(unsigned int i = 0; i < in.size()-5; i++){
         switch (in[i]) {
-        case 'a':number = 10;break;
-        case 'b':number = 11;break;
-        case 'c':number = 12;break;
-        case 'd':number = 13;break;
-        default:number = in[i]-48;break;
+            case 'a':number = 10;break;
+            case 'b':number = 11;break;
+            case 'c':number = 12;break;
+            case 'd':number = 13;break;
+            default:number = in[i]-48;break;
         }
         front += number*pow(16,in.size()-5-i-1);
     }

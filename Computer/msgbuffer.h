@@ -11,7 +11,7 @@ class MsgBuffer
 {
 public:
     MsgBuffer();
-    sf::SoundBuffer convert(vector<char>message);
+    sf::SoundBuffer convert(char message);
     vector<sf::Int16> winFunc(vector<sf::Int16> samp);
 
 
