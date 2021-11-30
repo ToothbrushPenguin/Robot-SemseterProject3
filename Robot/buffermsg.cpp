@@ -37,6 +37,8 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             }
             oldrecLength = rec.size();
 
+            cout << result(fsout) << endl;
+
             if(fsout.size()==2){
                 if(toggle == 1&&result(fsout) == '#'){//stop bit
                     return dumb(msg);

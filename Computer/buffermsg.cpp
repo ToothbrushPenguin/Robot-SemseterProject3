@@ -37,17 +37,10 @@ vector<char> BufferMsg::SignalRecord(int timeout)
             }
             oldrecLength = rec.size();
 
-            cout << "{\""<<result(fsout)<<"\"}," << endl;
+            cout << result(fsout) << endl;
 
             if(fsout.size()==2){
                 if(toggle == 1&&result(fsout) == '#'){//stop bit
-                    vector<char> d = dumb(msg);
-
-                    cout << endl <<"a1159614"<< endl;
-                    for(uint i = 0; i < d.size(); i++){
-                        cout << d.at(i);
-                    }cout << endl;
-
                     return dumb(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
@@ -193,7 +186,7 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
 
 int BufferMsg::LargestInList(vector<double> list)
 {
-    //finding the largest value of a lsit and return the index of it
+    //finding the largest value of a list and return the index of it
     double largest=0;
     int largestIDX=0;
     for(unsigned int i = 0; i<list.size();i++){
@@ -225,26 +218,30 @@ vector<char> BufferMsg::dumb(vector<char> list)
     int count;
 
     for(uint i = 0;i<listLength;i++){
-        if(!(i==listLength-1)){
-            if(totalList.at(i) == totalList.at(i+1)){
-                count = 1;
-                while(totalList.at(i+1)==totalList.at(i)){
-                    if(i==listLength-2){
+        if(!(totalList[i]=='N')){
+            if(!(i==listLength-1)){
+                if(totalList.at(i) == totalList.at(i+1)){
+                    count = 1;
+                    while(totalList.at(i+1)==totalList.at(i)){
+                        if(i==listLength-2){
+                            i++;
+                            count++;
+                            break;
+                        }
                         i++;
                         count++;
-                        break;
                     }
-                    i++;
-                    count++;
-                }
-                for(int j = 0; j<round((double)count/2);j++){
-                    finalList.push_back(totalList.at(i));
-                }
+                    for(int j = 0; j<round((double)count/2);j++){
+                    //for(int j = 0; j<count/2;j++){
+                        finalList.push_back(totalList.at(i));
+                    }
+                }else{finalList.push_back(totalList.at(i));}
             }else{finalList.push_back(totalList.at(i));}
-        }else{finalList.push_back(totalList.at(i));}
-   }
+        }
+    }
     return finalList;
 }
+
 
 
 

@@ -30,7 +30,7 @@ void MsgHandeler::handshake(bool crc, int readPn)
 
 
     for(unsigned int u = 0; u< truFal.size(); u++){
-        sBuf = buf.convert({truFal[u]});
+        sBuf = buf.convert(truFal[u]);
 
         sound.setBuffer(sBuf);
 
@@ -152,7 +152,7 @@ bool MsgHandeler::isValid(vector<char>in)
     unsigned long value=0;
     unsigned long divider = 65521;
 
-    if(in.size()==1 && in[0] == '0'){
+    if((in.size()==1 && in[0] == '0') || (in.size() < 6)){
         return 0;
     }
 

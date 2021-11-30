@@ -27,18 +27,18 @@ json RobotMovement::Move(bool dir, double speed)
         };
     return j;
 }
-
-json RobotMovement::Turn(bool dir, double turn)
+json RobotMovement::Turn(bool dir)
 {
+
     if(dir == true)
     {
-        turn = -turn;
+        turnSpeed = -turnSpeed;
     }
 
     json j =
         {
         {"linear", {{"x", 0}, {"y", 0}, {"z", 0}}},
-        {"angular", {{"x", 0}, {"y", 0}, {"z", turn}}}
+        {"angular", {{"x", 0}, {"y", 0}, {"z", turnSpeed}}}
         };
 
 //Vi får dir, som skal definere om det er mod højre eller venstre.
@@ -89,9 +89,10 @@ void RobotMovement::UdregningMove(int afstand, bool retning)
 
 }
 
-void RobotMovement::UdregningTurn(int vinkel, bool retning)
+void RobotMovement::UdregningTurn(int vinkel)
 {
-    //find uf af hvor stor antalOmdrejninger skal være, for at dreje "vinkel"
+
+    vinkel = RobotMovement::antalOmdrejninger;
 }
 
 void RobotMovement::sendMovement()
@@ -121,15 +122,19 @@ void RobotMovement::sendMovement()
         }
         else if(koeVec2[i] == "T")
         {
-            UdregningTurn(RobotMovement::vinkelVec[0], RobotMovement::HVvec[0]);
+            UdregningTurn(RobotMovement::vinkelVec[0]);
             cout << "Drejer: " <<RobotMovement::vinkelVec[0] << endl;
 
             json movement;
-            movement = Turn(retning,/*Indsæt udregnet hastighed*/1);
-            for(int i = 0; i < antalOmdrejninger; i++)
+
+            movement = Turn(RobotMovement::HVvec[0]);
+
+            cout << RobotMovement::vinkelVec[0] << endl;
+
+            for(int i = 0; i < RobotMovement::vinkelVec[0]; i++)
             {
                 publishMessage(movement);
-                this_thread::sleep_for(chrono::milliseconds(200));
+                this_thread::sleep_for(chrono::milliseconds(500));
             }
 
             vinkelVec.erase(vinkelVec.begin());

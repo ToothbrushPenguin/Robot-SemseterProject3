@@ -47,6 +47,10 @@ private:
     //skal fjernes
     ofstream samplefile;
 
+    double succ = 0;
+    double fail = 0;
+    vector<char> succes ={'a','1','1','5','9','6','1','4'};
+
 };
 
 #endif // BUFFERMSG_H
