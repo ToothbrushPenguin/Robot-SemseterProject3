@@ -90,6 +90,7 @@ void Ui::runUi()
 
                 }
                 else if(tmore == 'n'){
+                    msg.push_back({'a','b','c'});
                     break;
                 }
                 else{cout << "Invalid Input" << endl << " Please use either [y/n]" <<endl;moves++;}
