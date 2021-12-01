@@ -29,6 +29,9 @@ void Ui::runUi()
             moves = 1;
             for(int i=0;i<moves;i++){
                 if(msgNr!=0){
+                    for(int q =0;q<60;q++){
+                        cout <<"\n";
+                    }
                     cout <<endl<< "Current route: "<<endl;
 
                     for (uint k=0;k<showMsg.size();k++){
@@ -37,12 +40,8 @@ void Ui::runUi()
                         }cout << endl;
                     }
                 }
-                cout << endl << "Do you wish to add, or delete a move? [y/n/d]"<<endl;
-                cin >> tmore;
-                if(tmore=='y'){
-                    more = tmore;
                     moves++;
-                    cout <<endl<< "What is your move? [f/b][cm] or [r/l][1-8]"<<endl;
+                    cout <<endl<< "What is your move? [f/b][cm]" <<endl<<"For turning [r/l][1-8]"<<endl<<"To delete a move [d]"<<endl<< "To execute the route [e]"<<endl;
                     cin >> tmove;
                     if(((((tmove[0]=='f'||tmove[0]=='b')&&tmove[1]!='0')&&(tmove.size()>=2)&&tmove.size()<=4)&&(tmove[1]=='1'||tmove[1]=='2'||tmove[1]=='3'||tmove[1]=='4'||tmove[1]=='5'||tmove[1]=='6'||tmove[1]=='7'||tmove[1]=='8'||tmove[1]=='9'))||((tmove[0]=='r'||tmove[0]=='l')&&((tmove[1]=='1'||tmove[1]=='2'||tmove[1]=='3'||tmove[1]=='4'||tmove[1]=='5'||tmove[1]=='6'||tmove[1]=='7'||tmove[1]=='8'))&&(tmove.size()<=2))){
                         msg.push_back({});
@@ -72,28 +71,27 @@ void Ui::runUi()
                                 showMsg[msgNr].push_back(tmove[j]);
                             }
                         }msgNr++;
-                    }else{cout << "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
-                }
-                else if(tmore == 'd'){
-                    moves++;
-                    msgNr--;
-                    cout << endl;
-                    for(uint m = 0;m<showMsg.size();m++){
-                        cout << m+1 <<". ";
-                        for(uint n =0;n<showMsg[m].size();n++){
-                            cout << showMsg[m][n];
-                        }cout << endl;
                     }
-                    cout << endl << "Which entry do you wish to delete?"<<endl;
-                    cin >> delIndex;
-                    showMsg.erase(showMsg.begin()+delIndex-1);
+                    else if(tmove == 'd'){
+                        moves++;
+                        msgNr--;
+                        cout << endl;
+                        for(uint m = 0;m<showMsg.size();m++){
+                            cout << m+1 <<". ";
+                            for(uint n =0;n<showMsg[m].size();n++){
+                                cout << showMsg[m][n];
+                            }cout << endl;
+                        }
+                        cout << endl << "Which entry do you wish to delete?"<<endl;
+                        cin >> delIndex;
+                        showMsg.erase(showMsg.begin()+delIndex-1);
 
-                }
-                else if(tmore == 'n'){
-                    msg.push_back({'a','b','c'});
-                    break;
-                }
-                else{cout << "Invalid Input" << endl << " Please use either [y/n]" <<endl;moves++;}
+                    }
+                    else if(tmove == 'e'){
+                        msg.push_back({'a','b','c'});
+                        break;
+                    }
+                    else{cout << "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
             }
             cout << "Complete Route: "<<endl << "{{";
             for (uint k=0;k<showMsg.size();k++){
