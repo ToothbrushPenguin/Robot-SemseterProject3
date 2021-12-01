@@ -18,7 +18,8 @@ add_executable(Computer
     seqhandler.cpp seqhandler.h
     msghandeler.cpp msghandeler.h
     buffermsg.cpp buffermsg.h
-    signalrecoder.cpp signalrecoder.h)
+    signalrecoder.cpp signalrecoder.h
+    ui.cpp ui.h)
 
 target_link_libraries(Computer sfml-audio sfml-system)
 
