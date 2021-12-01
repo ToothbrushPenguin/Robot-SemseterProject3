@@ -7,6 +7,11 @@ Ui::Ui()
 
 void Ui::runUi()
 {
+
+    vector<vector<char>> msg1 ={{'c','2','5'},{'d','2','5'},{'a','b','c'}};
+
+
+    record(msg1);
     vector<vector<char>> msg ={};
     vector<vector<char>> showMsg = {};
     char play = 'y';

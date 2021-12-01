@@ -177,9 +177,13 @@ bool MsgHandeler::isValid(vector<char>in)
 
 int MsgHandeler::readPn(vector<char> msg)
 {
-    int pnout = ((int)msg[msg.size()-6]-48);
+    if(msg.size()>5){
+        int pnout = ((int)msg[msg.size()-6]-48);
+        return pnout;
+    }else{
+        return 0;
+    }
 
-    return pnout;
 }
 
 bool MsgHandeler::correctPn(int readpn)

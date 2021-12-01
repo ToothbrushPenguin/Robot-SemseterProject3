@@ -120,7 +120,7 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
 
     avgBG -= (largestAmp-secLargestAmp)/(freqs.size()-2);
 
-    if(amps[secLargestIdx] > 1.75*avgBG){
+    if(amps[secLargestIdx] > 1.66*avgBG){
 
         int first = freqs[largestIdx];
         int second = freqs[secLargestIdx];

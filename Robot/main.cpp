@@ -7,20 +7,20 @@
 using namespace std;
 
 // Declared globally as signal handler can't be part of the class..
-//mqtt::async_client* cli;
-//mqtt::topic* top;
-//mqtt::token_ptr tok;
+mqtt::async_client* cli;
+mqtt::topic* top;
+mqtt::token_ptr tok;
 
 // Handle CTRL + C and stop the robot
-//void signal_Handler(int signum) {
-//    json stop_msg = {{"linear", {{"x", 0.0}, {"y", 0}, {"z", 0}}},
-//    {"angular", {{"x", 0}, {"y", 0}, {"z", 0.0}}}
-//    };
-//    cout << "CTRL + C pressed, exiting.." << endl;
-//    tok = top->publish(stop_msg.dump());
-//    tok->wait();
-//    exit(signum);
-//};
+void signal_Handler(int signum) {
+    json stop_msg = {{"linear", {{"x", 0.0}, {"y", 0}, {"z", 0}}},
+    {"angular", {{"x", 0}, {"y", 0}, {"z", 0.0}}}
+    };
+    cout << "CTRL + C pressed, exiting.." << endl;
+    tok = top->publish(stop_msg.dump());
+    tok->wait();
+    exit(signum);
+};
 
 int main()
 {
@@ -33,29 +33,27 @@ int main()
     //------------------------------------------------------------------------------
                        //krevet kode for at connect turtlebot
 
-    //   signal(SIGINT, signal_Handler);
-    //   cout << "Initializing for server '" << ADDRESS << "'..." << endl;
-    //   mqtt::async_client cli(ADDRESS, "");
-    //   mqtt::topic top(cli, TOPIC, QOS);
-    //
-    //   RobotMovement ex(cli, top);
-    //   bool connected = ex.Connect();
-    //   cout << "Connected: " << connected << endl;
+       signal(SIGINT, signal_Handler);
+       cout << "Initializing for server '" << ADDRESS << "'..." << endl;
+       mqtt::async_client cli(ADDRESS, "");
+       mqtt::topic top(cli, TOPIC, QOS);
+
+       RobotMovement ex(cli, top);
+       bool connected = ex.Connect();
+       cout << "Connected: " << connected << endl;
 
     //------------------------------------------------------------------------------
                       //besked modtagelse
 
     while(boolW){
-    vector<char> message;
 
-        message = bM.SignalRecord();
+        vector<char> message = bM.SignalRecord();
 
         cout << "message: ";
         for(uint i = 0; i < message.size(); i++){
             cout << message[i];
         }
         cout << endl;
-
         handeler.handshake(handeler.isValid(message),handeler.readPn(message));
         //------for test------
 
@@ -89,7 +87,7 @@ int main()
         }
     }
 
-    cout << "fak u: " << endl;
+    cout << "Robot moves: " << endl;
 
     for(unsigned int i = 0; i < dirs.size(); i++){
         cout << dirs.at(i) << " : " << vals.at(i) << endl;
@@ -98,28 +96,37 @@ int main()
 
     //------------------------------------------------------------------------------
                       //bevægelse af robotten
-    //for(unsigned int i = 0; i < dirs.size(); i++){
-    //    switch (dirs.at(i)){
-    //    case LEFT:
-    //        ex.addTurn(vals.at(i), 1);
-    //        break;
-    //    case RIGHT:
-    //        ex.addTurn(vals.at(i), 0);
-    //        break;
-    //    case UP:
-    //        ex.addMovement(vals.at(i), 1);
-    //        break;
-    //    case DOWN:
-    //        ex.addMovement(vals.at(i), 0);
-    //        break;
-    //    case HALT:
-    //        ex.addMovement(0, 1);
-    //        break;
-    //    default:
-    //        break;
-    //    }
-    //}
-    //ex.sendMovement();
+    cout << "time to drive" << endl;
+    for(unsigned int i = 0; i < dirs.size(); i++){
+        cout << i << " : ";
+        switch (dirs.at(i)){
+        case LEFT:
+            cout << "left" << endl;
+            ex.addTurn(vals.at(i), 1);
+            break;
+        case RIGHT:
+            cout << "right" << endl;
+            ex.addTurn(vals.at(i), 0);
+            break;
+        case UP:
+            cout << "up" << endl;
+            ex.addMovement(vals.at(i), 1);
+            break;
+        case DOWN:
+            cout << "down" << endl;
+            ex.addMovement(vals.at(i), 0);
+            break;
+        case HALT:
+            cout << "halt" << endl;
+            ex.addMovement(0, 1);
+            break;
+        default:
+            break;
+            cout << "default" << endl;
+        }
+    }
+    cout << "send" << endl;
+    ex.sendMovement();
 
     //---------------------------------------------------------------------------
 }
