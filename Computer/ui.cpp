@@ -67,7 +67,7 @@ void Ui::runUi()
                         msg[msgNr].push_back(move);
                         showMsg[msgNr].push_back(tmove[0]);
                         for (uint j=1;j<tmove.length();j++){
-                            if(tmove[j]=='1'||tmove[j]=='2'||tmove[j]=='3'||tmove[j]=='4'||tmove[j]=='5'||tmove[j]=='6'||tmove[j]=='7'||tmove[j]=='8'||tmove[j]=='9'){
+                            if(tmove[j]=='0'||tmove[j]=='1'||tmove[j]=='2'||tmove[j]=='3'||tmove[j]=='4'||tmove[j]=='5'||tmove[j]=='6'||tmove[j]=='7'||tmove[j]=='8'||tmove[j]=='9'){
                                 msg[msgNr].push_back(tmove[j]);
                                 showMsg[msgNr].push_back(tmove[j]);
                             }
