@@ -11,8 +11,6 @@ void Ui::runUi()
     vector<vector<char>> showMsg = {};
     char play = 'y';
     char tplay;
-    char more;
-    char tmore;
     char move;
     string tmove;
     string distance;
@@ -29,9 +27,7 @@ void Ui::runUi()
             moves = 1;
             for(int i=0;i<moves;i++){
                 if(msgNr!=0){
-                    for(int q =0;q<60;q++){
-                        cout <<"\n";
-                    }
+                    cout << "\x1B[2J\x1B[H";
                     cout <<endl<< "Current route: "<<endl;
 
                     for (uint k=0;k<showMsg.size();k++){
@@ -40,58 +36,55 @@ void Ui::runUi()
                         }cout << endl;
                     }
                 }
-                    moves++;
-                    cout <<endl<< "What is your move? [f/b][cm]" <<endl<<"For turning [r/l][1-8]"<<endl<<"To delete a move [d]"<<endl<< "To execute the route [e]"<<endl;
-                    cin >> tmove;
-                    if(((((tmove[0]=='f'||tmove[0]=='b')&&tmove[1]!='0')&&(tmove.size()>=2)&&tmove.size()<=4)&&(tmove[1]=='1'||tmove[1]=='2'||tmove[1]=='3'||tmove[1]=='4'||tmove[1]=='5'||tmove[1]=='6'||tmove[1]=='7'||tmove[1]=='8'||tmove[1]=='9'))||((tmove[0]=='r'||tmove[0]=='l')&&((tmove[1]=='1'||tmove[1]=='2'||tmove[1]=='3'||tmove[1]=='4'||tmove[1]=='5'||tmove[1]=='6'||tmove[1]=='7'||tmove[1]=='8'))&&(tmove.size()<=2))){
-                        msg.push_back({});
-                        showMsg.push_back({});
-                        switch (tmove[0]) {
-                        case 'f':
-                            move='c';
-                            break;
-                        case 'r':
-                            move='b';
-                            break;
-                        case 'l':
-                            move='a';
-                            break;
-                        case 'b':
-                            move='d';
-                            break;
-                        default:
-                            move ='c';
-                            break;
-                        }
-                        msg[msgNr].push_back(move);
-                        showMsg[msgNr].push_back(tmove[0]);
-                        for (uint j=1;j<tmove.length();j++){
-                            if(tmove[j]=='0'||tmove[j]=='1'||tmove[j]=='2'||tmove[j]=='3'||tmove[j]=='4'||tmove[j]=='5'||tmove[j]=='6'||tmove[j]=='7'||tmove[j]=='8'||tmove[j]=='9'){
-                                msg[msgNr].push_back(tmove[j]);
-                                showMsg[msgNr].push_back(tmove[j]);
-                            }
-                        }msgNr++;
-                    }
-                    else if(tmove == 'd'){
-                        moves++;
-                        msgNr--;
-                        cout << endl;
-                        for(uint m = 0;m<showMsg.size();m++){
-                            cout << m+1 <<". ";
-                            for(uint n =0;n<showMsg[m].size();n++){
-                                cout << showMsg[m][n];
-                            }cout << endl;
-                        }
-                        cout << endl << "Which entry do you wish to delete?"<<endl;
-                        cin >> delIndex;
-                        showMsg.erase(showMsg.begin()+delIndex-1);
-
-                    }
-                    else if(tmove == 'e'){
-                        msg.push_back({'a','b','c'});
+                moves++;
+                cout <<endl<< "What is your move? [f/b][cm]" <<endl<<"For turning [r/l][1-8]"<<endl<<"To delete a move [d]"<<endl<< "To execute the route [e]"<<endl;
+                cin >> tmove;
+                if(tmove[0]=='f'||tmove[0]=='b'||tmove[0]=='r'||tmove[0]=='l'){
+                    msg.push_back({});
+                    showMsg.push_back({});
+                    switch (tmove[0]) {
+                    case 'f':
+                        move='c';
+                        break;
+                    case 'r':
+                        move='b';
+                        break;
+                    case 'l':
+                        move='a';
+                        break;
+                    case 'b':
+                        move='d';
+                        break;
+                    default:
+                        move ='c';
                         break;
                     }
-                    else{cout << "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
+                    msg[msgNr].push_back(move);
+                    showMsg[msgNr].push_back(tmove[0]);
+                    for (uint j=1;j<tmove.length();j++){
+                        msg[msgNr].push_back(tmove[j]);
+                        showMsg[msgNr].push_back(tmove[j]);
+                        }msgNr++;
+                    }
+                else if(tmove == 'd'){
+                    moves++;
+                    msgNr--;
+                    cout << endl;
+                    for(uint m = 0;m<showMsg.size();m++){
+                        cout << m+1 <<". ";
+                        for(uint n =0;n<showMsg[m].size();n++){
+                            cout << showMsg[m][n];
+                        }cout << endl;
+                    }
+                    cout << endl << "Which entry do you wish to delete?"<<endl;
+                    cin >> delIndex;
+                    showMsg.erase(showMsg.begin()+delIndex-1);
+                }
+                else if(tmove == 'e'){
+                    msg.push_back({'a','b','c'});
+                    break;
+                }
+                else{cout << "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
             }
             cout << "Complete Route: "<<endl << "{{";
             for (uint k=0;k<showMsg.size();k++){
@@ -101,8 +94,6 @@ void Ui::runUi()
                     }else{cout << showMsg[k][l]<<",";}
                 }if(k!=showMsg.size()-1){cout << "},{";}
             }cout << "}}"<<endl<<endl;
-
-
             record(msg);
 
             //INSERT WAIT FOR ROBOT CONFIRMATION HERE
