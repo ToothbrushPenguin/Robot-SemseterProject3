@@ -40,10 +40,6 @@ json RobotMovement::Turn(bool dir)
         {"linear", {{"x", 0}, {"y", 0}, {"z", 0}}},
         {"angular", {{"x", 0}, {"y", 0}, {"z", turnSpeed}}}
         };
-
-//Vi får dir, som skal definere om det er mod højre eller venstre.
-//0 == venstre, 1 == Højre
-//Herefter turn, som definere hvor mange grader, i radianer, den skal dreje mod den specificerede side
     return j;
 }
 
@@ -76,11 +72,12 @@ bool RobotMovement::Connect() // Connecter robotten og outputter i terminal
 void RobotMovement::UdregningMove(int afstand, bool retning)
 {
     retning = RobotMovement::retning;
-    dist = afstand / 4.775;
+    dist = afstand / 4.775;         //dist is the amount of times the send message is gonna loop (231*0,2+1,55)/10 = 4,775 (dist is an integer)
 
-    rest = (afstand / 4.775)-dist;
+    rest = (afstand / 4.775)-dist;  //rest, is how much of the distance is left to achieve the desired distance
 
-    restfart = (rest - 1.55)/23.1;
+    restfart = (rest - 1.55)/23.1;  //restfart is what speed we need to set the motors to, for it to drive the last distance.
+                                    //this make the equation so that the speed is a function of the last distance instead of the distance being based on speed.
 
     if(restfart < 0)
     {
@@ -106,7 +103,7 @@ void RobotMovement::sendMovement()
              cout << "Kører: " <<RobotMovement::afstandVec[0] << endl;
 
              json movement;
-             movement = Move(retning,0.2);
+             movement = Move(retning,speed);    //using defined speed (0,2)
              for(int i = 0; i < dist; i++)
              {
                  publishMessage(movement);
@@ -156,19 +153,19 @@ void RobotMovement::sendMovement()
 void RobotMovement::addMovement(int afstand, bool retning)
 {
     int x = koeVec.size();
-    RobotMovement::koeVec.push_back(x+1);
-    RobotMovement::koeVec2.push_back("M");
-    RobotMovement::afstandVec.push_back(afstand);
-    RobotMovement::retningVec.push_back(retning);
+    RobotMovement::koeVec.push_back(x+1);       //index of the specefic move added
+    RobotMovement::koeVec2.push_back("M");      //M for Move
+    RobotMovement::afstandVec.push_back(afstand);//distance to move
+    RobotMovement::retningVec.push_back(retning);//Forward or backwards
 }
 
 void RobotMovement::addTurn(int vinkel, bool retning)
 {
     int x = koeVec.size();
-    RobotMovement::koeVec.push_back(x+1);
-    RobotMovement::koeVec2.push_back("T");
-    RobotMovement::vinkelVec.push_back(vinkel);
-    RobotMovement::HVvec.push_back(retning);
+    RobotMovement::koeVec.push_back(x+1);       //index of the specific turn added.
+    RobotMovement::koeVec2.push_back("T");      //T for Turn
+    RobotMovement::vinkelVec.push_back(vinkel); //How much to turn
+    RobotMovement::HVvec.push_back(retning);    //Left or Right turn
 }
 
 bool RobotMovement::IsConnect()
