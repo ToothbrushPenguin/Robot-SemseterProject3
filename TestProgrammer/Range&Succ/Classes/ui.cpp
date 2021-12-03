@@ -115,40 +115,23 @@ void Ui::record(vector<vector<char>> msg)
     SeqHandler seq;
     sound.setVolume(100);
 
-    for(int i = 0; i < (int)msg.size(); i++){
+    while(true){
+        for(int i = 0; i < (int)msg.size(); i++){
 
-        cout << "Sending package Nr. " << i<<endl;
-        cout << (i/(int)msg.size())*100<<"% Done"<<endl;
+            vector<char> incoded = handler.seqIncoder(msg[i], seq.getPN());
+            incoded = handler.crcIncoder(incoded);
+            incoded = handler.ssbit(incoded);
 
-        vector<char> incoded = handler.seqIncoder(msg[i], seq.getPN());
-        incoded = handler.crcIncoder(incoded);
-        incoded = handler.ssbit(incoded);
+            sf::SoundBuffer buffer;
+            for(unsigned int u = 0; u< (incoded.size()); u++){
+                buffer = buf.convert(incoded[u]);
 
-        for(int j = 0; j < (int)incoded.size(); j++){
-            cout << incoded.at(j);
-        }
-        cout << endl<<endl;
-        cout <<incoded.size() << endl;
-        sf::SoundBuffer buffer;
-
-        for(unsigned int u = 0; u< (incoded.size()); u++){
-            cout << u << endl;
-            buffer = buf.convert(incoded[u]);
-
-            sound.setBuffer(buffer);
-            sound.play();
-            while(sound.getStatus()==2){
+                sound.setBuffer(buffer);
+                sound.play();
+                while(sound.getStatus()==2){
+                }
             }
         }
-
-        vector<char> robReply = bM.recordSignal(5000);
-
-        if(handler.isValid(robReply)){
-            if(!seq.validatePN(robReply)){
-                i--;
-            }
-        }else{
-            i--;
-        }
+    this_thread::sleep_for(chrono::milliseconds(1000));
     }
 }
