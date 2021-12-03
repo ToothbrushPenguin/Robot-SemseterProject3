@@ -1,8 +1,8 @@
 #include <iostream>
-#include "buffermsg.h"
-#include "msgbuffer.h"
-#include "msghandeler.h"
-#include "robotmovement.h"
+#include "../Classes/buffermsg.h"
+#include "../Classes/msgbuffer.h"
+#include "../Classes/msghandler.h"
+#include "../Classes/robotmovement.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ void signal_Handler(int signum) {
 int main()
 {
     BufferMsg bM;
-    MsgHandeler handeler;
+    MsgHandler handeler;
     vector<Direction> dirs;
     vector<double> vals;
     bool boolW = 1;
@@ -47,7 +47,7 @@ int main()
 
     while(boolW){
 
-        vector<char> message = bM.SignalRecord();
+        vector<char> message = bM.recordSignal();
 
         cout << "message: ";
         for(uint i = 0; i < message.size(); i++){
@@ -59,7 +59,7 @@ int main()
 
         while(!(handeler.isValid(message))){
 
-            message = bM.SignalRecord(1500);
+            message = bM.recordSignal(1500);
 
             cout << "message: ";
             for(uint i = 0; i < message.size(); i++){
@@ -74,7 +74,7 @@ int main()
         if(handeler.correctPn(handeler.readPn(message))){
             if(handeler.isStop(message) == RUNNING){
                 handeler.incRobPn();
-                dirs.push_back(handeler.DecodeMovement(message));
+                dirs.push_back(handeler.decodeMovement(message));
                 vals.push_back(handeler.decodeValue(message));
             }else if (handeler.isStop(message)== STOP){
                 handeler.resetRobPn();

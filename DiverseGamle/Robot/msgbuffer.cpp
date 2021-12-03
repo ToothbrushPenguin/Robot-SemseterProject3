@@ -12,8 +12,6 @@ MsgBuffer::MsgBuffer()
         f.push_back(10000*sin(n*2*M_PI*1336/samplerate));
         g.push_back(10000*sin(n*2*M_PI*1477/samplerate));
         h.push_back(10000*sin(n*2*M_PI*1633/samplerate));
-
-        zero.push_back(5000*sin(n*2*M_PI*0/samplerate));
     }
 }
 

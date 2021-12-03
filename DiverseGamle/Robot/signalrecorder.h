@@ -1,23 +1,22 @@
-#ifndef SIGNALRECODER_H
-#define SIGNALRECODER_H
+#ifndef SIGNALRECORDER_H
+#define SIGNALRECORDER_H
 
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include <complex>
 #include <iostream>
 #include <chrono>
-//#include <thread>
 #include <math.h>
 #include <future>
 
-
 using namespace std;
 using namespace sf;
+using namespace std::complex_literals;
 
-class SignalRecoder : public SoundRecorder
+class SignalRecorder  : public SoundRecorder
 {
 public:
-    SignalRecoder();
+    SignalRecorder();
 
     virtual bool onStart() override;
     virtual bool onProcessSamples(const int16_t* samples, size_t sampleCount) override;
@@ -29,7 +28,6 @@ public:
 
     vector<int> samp={0};
     vector<int> tempsamp;
-
 };
 
-#endif // SIGNALRECODER_H
+#endif // SIGNALRECORDER_H

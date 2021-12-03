@@ -19,11 +19,13 @@ find_package(PahoMqttCpp REQUIRED)
 include_directories("inc")
 
 
-add_executable(Robot main.cpp
-    msghandeler.cpp msghandeler.h
-    msgbuffer.cpp msgbuffer.h
-    buffermsg.cpp buffermsg.h signalrecoder.cpp signalrecoder.h
-    robotmovement.cpp robotmovement.h
-
+add_executable(
+    Robot
+    main.cpp
+    msghandler.cpp      msghandler.h
+    msgbuffer.cpp       msgbuffer.h
+    buffermsg.cpp       buffermsg.h
+    robotmovement.cpp   robotmovement.h
+    signalrecorder.cpp  signalrecorder.h
     )
 target_link_libraries(Robot PahoMqttCpp::paho-mqttpp3 sfml-audio sfml-system )

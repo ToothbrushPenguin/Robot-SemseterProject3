@@ -1,11 +1,10 @@
-#include "signalrecoder.h"
+#include "signalrecorder.h"
 
-SignalRecoder::SignalRecoder()
+SignalRecorder::SignalRecorder()
 {
 
 }
-
-bool SignalRecoder::onStart()
+bool SignalRecorder::onStart()
 {
     // Initialize whatever has to be done before the capture starts
     setProcessingInterval(sf::milliseconds(25));
@@ -13,7 +12,7 @@ bool SignalRecoder::onStart()
     // Return true to start playing
     return true;
 }
-bool SignalRecoder::onProcessSamples(const int16_t *samples, size_t sampleCount)
+bool SignalRecorder::onProcessSamples(const int16_t *samples, size_t sampleCount)
 {
     const lock_guard<mutex> lock(mutexlock);
     for(unsigned int j = 0; j < sampleCount; j++){
@@ -22,16 +21,15 @@ bool SignalRecoder::onProcessSamples(const int16_t *samples, size_t sampleCount)
     return 1;
 }
 
-void SignalRecoder::onStop()
+void SignalRecorder::onStop()
 {
 
 }
 
-vector<int> SignalRecoder::getSamp()
+vector<int> SignalRecorder::getSamp()
 {
     const lock_guard<mutex> lock(mutexlock);
     tempsamp = samp;
     samp.clear();
     return tempsamp;
 }
-

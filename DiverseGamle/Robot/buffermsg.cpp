@@ -5,7 +5,7 @@ BufferMsg::BufferMsg()
     //test--
     samplefile.open ("samplefile.txt");
     //------
-    if (SignalRecoder::isAvailable())
+    if (SignalRecorder::isAvailable())
     {
     recorder.start(samplerate);
     this_thread::sleep_for(chrono::milliseconds(2000));
@@ -13,7 +13,7 @@ BufferMsg::BufferMsg()
 
 }
 
-vector<char> BufferMsg::SignalRecord(int timeout)
+vector<char> BufferMsg::recordSignal(int timeout)
 {
     int sleeptime = 25;
     int sleepOffset = 0;
@@ -30,7 +30,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
                 rec.push_back(temprec.at(i));
             }
 
-            fsout = FourierSplit(rec);
+            vector<int> fsout = fourierSplit(rec);
 
             for(int i = 0; i < oldrecLength; i++){
                 rec.erase(rec.begin());
@@ -41,7 +41,7 @@ vector<char> BufferMsg::SignalRecord(int timeout)
 
             if(fsout.size()==2){
                 if(toggle == 1&&result(fsout) == '#'){//stop bit
-                    return dumb(msg);
+                    return interpreter(msg);
                 }
                 if(toggle == 1&&result(fsout) != '*'){
                     msg.push_back(result(fsout));
@@ -77,15 +77,14 @@ BufferMsg::~BufferMsg()
 }
 
 
-vector<int> BufferMsg::FourierSplit(vector<int> samples)
+vector<int> BufferMsg::fourierSplit(vector<int> samples)
 {
-    vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
 
     int oriL = samples.size();
     int npad = samplerate - oriL;
 
     vector<complex<double>> input = {};
-    vector<complex<double>> dft = {};
+    vector<complex<double>> dftout = {};
 
     vector<int> nsamples;
     nsamples=winFunc(samples);
@@ -98,18 +97,18 @@ vector<int> BufferMsg::FourierSplit(vector<int> samples)
         input.push_back(0.);
     }
 
-    dft = DFT(input);
+    dftout = dft(input);
 
     vector<double> amps = {};
 
-    for(uint i = 0; i < dft.size(); i++){
-        amps.push_back(abs(dft[i]));
+    for(uint i = 0; i < dftout.size(); i++){
+        amps.push_back(abs(dftout[i]));
     }
 
-    int largestIdx = LargestInList(amps);
+    int largestIdx = largestInList(amps);
     int largestAmp = amps[largestIdx];
     amps[largestIdx] = 0;
-    int secLargestIdx = LargestInList(amps);
+    int secLargestIdx = largestInList(amps);
     int secLargestAmp = amps[secLargestIdx];
     amps[largestIdx] = largestAmp;
 
@@ -163,11 +162,10 @@ char BufferMsg::result(vector<int> frequency)
     return 'N';
 }
 
-vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
+vector<complex<double>> BufferMsg::dft(vector<complex<double>> input)
 {
 
     int N = input.size();
-    vector<double> freqs = {697, 770, 852, 941, 1209, 1336, 1477, 1633};
     vector<complex<double>> output = {};
 
     for(uint k = 0; k < freqs.size(); k++){
@@ -184,7 +182,7 @@ vector<complex<double>> BufferMsg::DFT(vector<complex<double>> input)
     return output;
 }
 
-int BufferMsg::LargestInList(vector<double> list)
+int BufferMsg::largestInList(vector<double> list)
 {
     //finding the largest value of a list and return the index of it
     double largest=0;
@@ -210,7 +208,7 @@ vector<int> BufferMsg::winFunc(vector<int> samp)
     return nsamp;
 }
 
-vector<char> BufferMsg::dumb(vector<char> list)
+vector<char> BufferMsg::interpreter(vector<char> list)
 {
     vector<char> totalList = list;
     vector<char> finalList;

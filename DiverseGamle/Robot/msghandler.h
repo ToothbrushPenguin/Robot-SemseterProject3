@@ -1,5 +1,6 @@
-#ifndef MSGHANDELER_H
-#define MSGHANDELER_H
+#ifndef MSGHANDLER_H
+#define MSGHANDLER_H
+
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -12,20 +13,20 @@ enum Direction
 {
     LEFT, RIGHT, UP, DOWN, HALT
 };
-
 enum State
 {
     STOP, RUNNING
 };
 
-class MsgHandeler
+
+class MsgHandler
 {
 public:
-    MsgHandeler();
+    MsgHandler();
 
     void handshake(bool crc, int readPn);
     State isStop(vector<char> e);
-    Direction DecodeMovement(vector<char> e);
+    Direction decodeMovement(vector<char> e);
     double decodeValue(vector<char> e);
 
     vector<char> crcIncoder(vector<char> e);
@@ -44,4 +45,4 @@ private:
     int robPn = 0;
 };
 
-#endif // MSGHANDELER_H
+#endif // MSGHANDLER_H

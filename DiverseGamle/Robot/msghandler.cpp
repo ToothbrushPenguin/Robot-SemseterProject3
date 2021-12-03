@@ -1,12 +1,11 @@
-#include "msghandeler.h"
+#include "msghandler.h"
 
-
-MsgHandeler::MsgHandeler()
+MsgHandler::MsgHandler()
 {
 
 }
 
-void MsgHandeler::handshake(bool crc, int readPn)
+void MsgHandler::handshake(bool crc, int readPn)
 {
     MsgBuffer buf;
     sf::SoundBuffer sBuf;
@@ -39,7 +38,7 @@ void MsgHandeler::handshake(bool crc, int readPn)
     }
 }
 
-State MsgHandeler::isStop(vector<char> in)
+State MsgHandler::isStop(vector<char> in)
 {
     string stop = "abc";
     string curStr;
@@ -53,7 +52,7 @@ State MsgHandeler::isStop(vector<char> in)
     return RUNNING;
 }
 
-Direction MsgHandeler::DecodeMovement(vector<char> in)
+Direction MsgHandler::decodeMovement(vector<char> in)
 {
     Direction dir;
     string msgDir;
@@ -72,7 +71,7 @@ Direction MsgHandeler::DecodeMovement(vector<char> in)
     return dir;
 }
 
-double MsgHandeler::decodeValue(vector<char> in)
+double MsgHandler::decodeValue(vector<char> in)
 {
     double out=0;
         for(unsigned int i = 0; i < in.size()-7; i++){
@@ -82,7 +81,7 @@ double MsgHandeler::decodeValue(vector<char> in)
 
 }
 
-vector<char> MsgHandeler::crcIncoder(vector<char> in)
+vector<char> MsgHandler::crcIncoder(vector<char> in)
 {
     int number;
     unsigned long int value=0;
@@ -121,7 +120,7 @@ vector<char> MsgHandeler::crcIncoder(vector<char> in)
 
 }
 
-vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
+vector<char> MsgHandler::seqIncoder(vector<char> msg, int pnIn)
 {
 
     vector<char> msgout = msg;
@@ -130,7 +129,7 @@ vector<char> MsgHandeler::seqIncoder(vector<char> msg, int pnIn)
     return msgout;
 }
 
-vector<char> MsgHandeler::ssbit(vector<char> msg)
+vector<char> MsgHandler::ssbit(vector<char> msg)
 {
     vector<char> out = {'*'};
     for(unsigned int i = 0; i < msg.size(); i++){
@@ -141,7 +140,7 @@ vector<char> MsgHandeler::ssbit(vector<char> msg)
     return out;
 }
 
-bool MsgHandeler::isValid(vector<char>in)
+bool MsgHandler::isValid(vector<char>in)
 {
     int number;
     unsigned long front = 0;
@@ -175,7 +174,7 @@ bool MsgHandeler::isValid(vector<char>in)
     return 0;
 }
 
-int MsgHandeler::readPn(vector<char> msg)
+int MsgHandler::readPn(vector<char> msg)
 {
     if(msg.size()>5){
         int pnout = ((int)msg[msg.size()-6]-48);
@@ -186,7 +185,7 @@ int MsgHandeler::readPn(vector<char> msg)
 
 }
 
-bool MsgHandeler::correctPn(int readpn)
+bool MsgHandler::correctPn(int readpn)
 {
     if((readpn == robPn + 1)||(readpn == 9 && robPn == 0)){
         return true;
@@ -194,12 +193,12 @@ bool MsgHandeler::correctPn(int readpn)
     return false;
 }
 
-void MsgHandeler::resetRobPn()
+void MsgHandler::resetRobPn()
 {
     robPn = 0;
 }
 
-void MsgHandeler::incRobPn()
+void MsgHandler::incRobPn()
 {
     if(robPn >= 8){
         resetRobPn();
@@ -208,7 +207,7 @@ void MsgHandeler::incRobPn()
     }
 }
 
-int MsgHandeler::getRobPn()
+int MsgHandler::getRobPn()
 {
     return robPn;
 }
