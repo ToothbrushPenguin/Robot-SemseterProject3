@@ -2,6 +2,10 @@
 #include <vector>
 #include <complex>
 #include <chrono>
+#include <iostream>
+#include <fstream>
+#include <string>
+
 
 
 using namespace std;
@@ -64,8 +68,7 @@ vector<complex<double>> FastFourier(vector<complex<double>> msg)
 
 
 int main()
-{
-
+{  
     vector<int> samples = {};
 
     auto start = chrono::high_resolution_clock::now();
