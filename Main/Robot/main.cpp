@@ -45,6 +45,7 @@ int main()
     //------------------------------------------------------------------------------
                       //besked modtagelse
 
+
     while(boolW){
 
         vector<char> message = bM.recordSignal();
@@ -102,23 +103,23 @@ int main()
         switch (dirs.at(i)){
         case LEFT:
             cout << "left" << endl;
-            ex.addTurn(vals.at(i), 1);
+            ex.addTurn(vals.at(i), true);
             break;
         case RIGHT:
             cout << "right" << endl;
-            ex.addTurn(vals.at(i), 0);
+            ex.addTurn(vals.at(i), false);
             break;
         case UP:
             cout << "up" << endl;
-            ex.addMovement(vals.at(i), 1);
+            ex.addMovement(vals.at(i), true);
             break;
         case DOWN:
             cout << "down" << endl;
-            ex.addMovement(vals.at(i), 0);
+            ex.addMovement(vals.at(i), false);
             break;
         case HALT:
             cout << "halt" << endl;
-            ex.addMovement(0, 1);
+            ex.addMovement(0, true);
             break;
         default:
             break;
@@ -129,4 +130,7 @@ int main()
     ex.sendMovement();
 
     //---------------------------------------------------------------------------
+
+
+
 }

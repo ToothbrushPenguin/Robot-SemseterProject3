@@ -32,14 +32,18 @@ json RobotMovement::Turn(bool dir)
 
     if(dir == true)
     {
-        turnSpeed = -turnSpeed;
+        RobotMovement::turnSpeed = -RobotMovement::turnSpeed;
     }
 
     json j =
         {
         {"linear", {{"x", 0}, {"y", 0}, {"z", 0}}},
-        {"angular", {{"x", 0}, {"y", 0}, {"z", turnSpeed}}}
+        {"angular", {{"x", 0}, {"y", 0}, {"z", RobotMovement::turnSpeed}}}
         };
+    if(dir == true)
+    {
+        RobotMovement::turnSpeed = -RobotMovement::turnSpeed;
+    }
     return j;
 }
 
@@ -71,7 +75,8 @@ bool RobotMovement::Connect() // Connecter robotten og outputter i terminal
 
 void RobotMovement::UdregningMove(int afstand, bool retning)
 {
-    retning = RobotMovement::retning;
+
+    RobotMovement::retning = retning;
     dist = afstand / 4.775;         //dist is the amount of times the send message is gonna loop (231*0,2+1,55)/10 = 4,775 (dist is an integer)
 
     rest = (afstand / 4.775)-dist;  //rest, is how much of the distance is left to achieve the desired distance
@@ -100,7 +105,11 @@ void RobotMovement::sendMovement()
         if(koeVec2[i] == "M")
         {
              UdregningMove(RobotMovement::afstandVec[0],RobotMovement::retningVec[0]);
+
              cout << "Kører: " <<RobotMovement::afstandVec[0] << endl;
+             cout << "drejer: " << RobotMovement::retningVec[0] << endl;
+             cout << "move retning: " << RobotMovement::retning << endl;
+             cout << endl;
 
              json movement;
              movement = Move(retning,speed);    //using defined speed (0,2)
@@ -121,12 +130,12 @@ void RobotMovement::sendMovement()
         {
             UdregningTurn(RobotMovement::vinkelVec[0]);
             cout << "Drejer: " <<RobotMovement::vinkelVec[0] << endl;
+            cout << "retning: " << RobotMovement::HVvec[0] << endl;
+            cout << endl;
 
             json movement;
 
             movement = Turn(RobotMovement::HVvec[0]);
-
-            cout << RobotMovement::vinkelVec[0] << endl;
 
             for(int i = 0; i < RobotMovement::vinkelVec[0]; i++)
             {

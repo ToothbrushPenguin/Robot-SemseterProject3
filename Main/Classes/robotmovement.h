@@ -14,8 +14,7 @@ using namespace std;
 using json = nlohmann::json;
 
 
-//const string ADDRESS { "tcp://localhost:1883" };
-const string ADDRESS { "tcp://192.168.227.105:1883" };
+const string ADDRESS { "tcp://localhost:1883" };
 const string TOPIC { "cmd_vel" };
 const int QOS = 1;
 
@@ -50,12 +49,12 @@ private:
     double turnSpeed = 1.63;
     double restfart;
     int antalOmdrejninger = 0;
-    vector<int> afstandVec;
-    vector<int> vinkelVec;
-    vector<bool> retningVec;
-    vector<bool> HVvec;
-    vector<int> koeVec;
-    vector<string> koeVec2;
+    vector<int> afstandVec = {};
+    vector<int> vinkelVec = {};
+    vector<bool> retningVec = {};
+    vector<bool> HVvec = {};
+    vector<int> koeVec = {};
+    vector<string> koeVec2 = {};
 
 
 //-------------------------------
