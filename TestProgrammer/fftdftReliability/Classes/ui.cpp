@@ -132,6 +132,6 @@ void Ui::record(vector<vector<char>> msg)
                 }
             }
         }
-    this_thread::sleep_for(chrono::milliseconds(14000));
+    this_thread::sleep_for(chrono::milliseconds(1000));
     }
 }

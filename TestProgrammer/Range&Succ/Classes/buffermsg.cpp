@@ -30,20 +30,6 @@ vector<char> BufferMsg::recordSignal(int timeout)
                 rec.push_back(temprec.at(i));
             }
 
-
-            //fdfedfdfd
-            samplefile << "{";
-            for(unsigned int i = 0; i< rec.size(); i++){
-                if(rec.size()==i){
-                    samplefile << rec.at(i);
-                }else{
-                    samplefile << rec.at(i) << " , ";
-                }
-            }
-            samplefile << "},";
-
-
-
             vector<int> fsout = fourierSplit(rec);
 
             for(int i = 0; i < oldrecLength; i++){

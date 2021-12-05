@@ -6,7 +6,7 @@ int main()
 {
     Ui u;
 
-    vector<vector<char>> msg1 ={{'a','1'}};
+    vector<vector<char>> msg1 ={{'a','6'}};
     u.record(msg1);
 
     //u.runUi();

@@ -11,10 +11,15 @@ class BufferMsg
 public:
     BufferMsg();
     vector<char> recordSignal(int timeout = -1);
+    vector<char> recordSignalFFT(int timeout = -1);
+    vector<vector<int>> temprecFFT = {};
     ~BufferMsg();
 
 private:
     vector<int> fourierSplit(vector<int> samples);//retunere de 2 frekvencer
+    vector<int> fourierSplitFFT(vector<int> samples);
+    vector<complex<double>> fastFourier(vector<complex<double>> msg);
+    vector<int> twoLargest(vector<double> chancein);
     char result(vector<int> frequency);
     vector<complex<double>> dft(vector<complex<double>> input);
     int largestInList(vector<double>list);
@@ -32,11 +37,6 @@ private:
 
     //skal fjernes
     ofstream samplefile;
-
-    double succ = 0;
-    double fail = 0;
-    vector<char> succes ={'a','1','1','5','9','6','1','4'};
-
 };
 
 #endif // BUFFERMSG_H
