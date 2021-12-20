@@ -27,7 +27,6 @@ void Ui::runUi()
             moves = 1;
             for(int i=0;i<moves;i++){
                 if(msgNr!=0){
-                    cout << "\x1B[2J\x1B[H";
                     cout <<endl<< "Current route: "<<endl;
 
                     for (uint k=0;k<showMsg.size();k++){
@@ -39,7 +38,7 @@ void Ui::runUi()
                 moves++;
                 cout <<endl<< "What is your move? [f/b][cm]" <<endl<<"For turning [r/l][1-8]"<<endl<<"To delete a move [d]"<<endl<< "To execute the route [e]"<<endl;
                 cin >> tmove;
-                if(tmove[0]=='f'||tmove[0]=='b'||tmove[0]=='r'||tmove[0]=='l'){
+                if((tmove[0]=='f'||tmove[0]=='b'||tmove[0]=='r'||tmove[0]=='l')&&(tmove.size())<5){
                     msg.push_back({});
                     showMsg.push_back({});
                     switch (tmove[0]) {
@@ -84,7 +83,7 @@ void Ui::runUi()
                     msg.push_back({'a','b','c'});
                     break;
                 }
-                else{cout << "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
+                else{cout << "\x1B[2J\x1B[H"<< "Invalid Input" << endl << " Please use either [f/r/l/b] and number in cm, or for a turn 1 to 8" <<endl;}
             }
             cout << "Complete Route: "<<endl << "{{";
             for (uint k=0;k<showMsg.size();k++){
